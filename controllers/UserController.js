@@ -64,4 +64,33 @@ module.exports = class UserController {
       console.log(error);
     }
   }
+
+  static async login(req, res) {
+    const { email, password } = req.body;
+
+    if (!email) {
+      res.status(422).json({ message: "Digite seu e-mail pessoal." });
+      return;
+    }
+
+    if (!password) {
+      res.status(422).json({ message: "Digite sua senha de segurança." });
+      return;
+    }
+
+    const user = await User.findOne({ email: email});
+    if(!user) {
+        res.status(422).json({ message: 'E-mail de usuário não encontrado!'});
+        return;
+    }
+
+    const matchPassword = await bcrypt.compare(password, user.password);
+    if(!matchPassword) {
+        res.status(422).json({ message: 'Senha inválida, tente outra vez!'});
+        return;
+    }
+
+    await createUserToken(user, req, res);
+    
+  }
 };
