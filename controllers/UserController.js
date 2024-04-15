@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+// helpers
 const createUserToken = require("../helpers/createUserToken");
+const getToken = require("../helpers/getToken");
 
 module.exports = class UserController {
   static async store(req, res) {
@@ -78,19 +81,37 @@ module.exports = class UserController {
       return;
     }
 
-    const user = await User.findOne({ email: email});
-    if(!user) {
-        res.status(422).json({ message: 'E-mail de usuário não encontrado!'});
-        return;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      res.status(422).json({ message: "E-mail de usuário não encontrado!" });
+      return;
     }
 
     const matchPassword = await bcrypt.compare(password, user.password);
-    if(!matchPassword) {
-        res.status(422).json({ message: 'Senha inválida, tente outra vez!'});
-        return;
+    if (!matchPassword) {
+      res.status(422).json({ message: "Senha inválida, tente outra vez!" });
+      return;
+    }
+    // authentication user
+    await createUserToken(user, req, res);
+  }
+
+  static async checkUser(req, res) {
+    let currentUser;
+
+    if (req.headers.authorization) {
+
+      const token = getToken(req);
+      const decoded = jwt.verify(token, "mysecret");
+
+      currentUser = await User.findById(decoded.id);
+      currentUser.password = undefined;
+    } else {
+      currentUser = null;
     }
 
-    await createUserToken(user, req, res);
     
+
+    res.status(200).send(currentUser);
   }
 };
