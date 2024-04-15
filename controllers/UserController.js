@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const createUserToken = require("../helpers/createUserToken");
 
 module.exports = class UserController {
   static async store(req, res) {
@@ -31,11 +32,9 @@ module.exports = class UserController {
     }
 
     if (password !== confirmPassword) {
-      res
-        .status(422)
-        .json({
-          message: "As senha e confirmação de senha precisam ser iguais.",
-        });
+      res.status(422).json({
+        message: "As senha e confirmação de senha precisam ser iguais.",
+      });
       return;
     }
 
@@ -57,10 +56,10 @@ module.exports = class UserController {
     });
 
     try {
+      // save user data
       const user = await data.save();
-      res
-        .status(201)
-        .json({ message: "Registro de usuário inserido com sucesso!", user });
+      // authentication jwt token
+      await createUserToken(user, req, res);
     } catch (error) {
       console.log(error);
     }
