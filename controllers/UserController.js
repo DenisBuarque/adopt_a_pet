@@ -4,6 +4,7 @@ const User = require("../models/User");
 // helpers
 const createUserToken = require("../helpers/createUserToken");
 const getToken = require("../helpers/getToken");
+const getUserByToken = require("../helpers/getUserByToken");
 
 module.exports = class UserController {
   static async store(req, res) {
@@ -100,7 +101,6 @@ module.exports = class UserController {
     let currentUser;
 
     if (req.headers.authorization) {
-
       const token = getToken(req);
       const decoded = jwt.verify(token, "mysecret");
 
@@ -109,9 +109,77 @@ module.exports = class UserController {
     } else {
       currentUser = null;
     }
-
-    
-
     res.status(200).send(currentUser);
+  }
+
+  static async getUserById(req, res) {
+    const id = req.params.id;
+
+    const user = await User.findById(id).select("-password");
+    if (!user) {
+      res.status(422).json({ mssage: "Usuário não encontrado!" });
+      return;
+    }
+    res.status(200).json({ user });
+  }
+
+  static async update(req, res) {
+    const id = req.params.id;
+
+    const { name, phone, email, password, confirmPassword } = req.body;
+
+    const image = "";
+
+    // get token user in page
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    if (!name) {
+      res.status(422).json({ message: "Digite seu nome." });
+      return;
+    }
+
+    user.name = name;
+
+    if (!phone) {
+      res.status(422).json({ message: "Digite seu telefone para contato." });
+      return;
+    }
+
+    user.phone = phone;
+
+    if (!email) {
+      res.status(422).json({ message: "Digite seu e-mail pessoal." });
+      return;
+    }
+
+    const existEmail = await User.findOne({ email: email });
+    if (user.email !== email && existEmail) {
+      res.status(422).json({ message: "Por favor utilize outro e-mail!" });
+      return;
+    }
+
+    user.email = email;
+
+    if (!password) {
+      res.status(422).json({ message: "Digite sua senha de segurança." });
+      return;
+    }
+
+    if (!confirmPassword) {
+      res.status(422).json({ message: "Digite a confirmação de senha." });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      res
+        .status(422)
+        .json({
+          message: "As senha e confirmação de senha precisam ser iguais.",
+        });
+      return;
+    }
+
+    res.status(200).json({ message: "Registro atualizado com sucesso!" });
   }
 };
