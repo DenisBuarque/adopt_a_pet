@@ -23,7 +23,7 @@ const User = mongoose.model(
         image: {
             type: String
         }
-    }, {timestamps: true})
+    }, {timestamp: true})
 );
 
 module.exports = User;

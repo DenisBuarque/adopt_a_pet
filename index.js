@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const connection = require('./database/connection');
+
+const UserRouter = require('./routes/UserRouter');
+
 const app = express();
 
 // confg Json response
@@ -13,7 +17,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
+// path public
 app.use(express.static('public'));
+
+// routes
+app.use('/users', UserRouter);
 
 app.listen(5000, () => {
     console.log("Servidor rodando na porta 5000");
