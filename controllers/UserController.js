@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const path = require('path');
+const fs = require('fs');
 // helpers
 const createUserToken = require("../helpers/createUserToken");
 const getToken = require("../helpers/getToken");
@@ -135,6 +137,16 @@ module.exports = class UserController {
     let image = "";
 
     if(req.file) {
+
+      let filenames = fs.readdirSync('public/assets/users').includes(user.image);
+      if(filenames) {
+        fs.unlink(`public/assets/users/${user.image}`, function(err) {
+          if (err) {
+            throw err;
+          }
+        });
+      }
+
       user.image = req.file.filename;
     }
 
