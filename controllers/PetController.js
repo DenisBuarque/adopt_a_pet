@@ -11,6 +11,8 @@ module.exports = class PetController {
 
         const available = true;
 
+        const images = req.files;
+
         if(!name) {
             res.status(422).json({ message: "Digite o nome do pet!" });
             return;
@@ -31,10 +33,15 @@ module.exports = class PetController {
             return;
         }
 
+        if(images.lenght === 0) {
+            res.status(422).json({ message: "Adicione pelo menos uma imagem!"});
+            return;
+        }
+
         const token = getToken(req);
         const user = await getUserByToken(token);
 
-        const data = Pet({
+        const pet = Pet({
             name,
             age,
             weigth,
@@ -50,8 +57,12 @@ module.exports = class PetController {
             }
         });
 
+        images.map((image) => {
+            pet.images.push(image.filename);
+        });
+
         try {
-            const newPet = await data.save(data);
+            const newPet = await pet.save(pet);
             res.status(201).json({ message: "Pet cadastrado com sucesso!", newPet, user});
         } catch (error) {
             res.status(500).json({ message: error});
