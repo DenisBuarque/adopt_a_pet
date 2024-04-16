@@ -4,6 +4,9 @@ GET http://localhost:5000/users/edit/661d65e8c0fa0518df8becab
 ### Listando pets
 GET http://localhost:5000/pets
 
+### Detalhe do pet do usuário
+GET http://localhost:5000/pets/show/661d65e8c0fa0518df8becab
+
 ### Login de usuário
 POST http://localhost:5000/users/login
 content-type: application/json
