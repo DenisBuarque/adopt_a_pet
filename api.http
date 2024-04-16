@@ -1,5 +1,8 @@
-### Gegando usuário
+### Pegando usuário
 GET http://localhost:5000/users/edit/661d65e8c0fa0518df8becab
+
+### Listando pets
+GET http://localhost:5000/pets
 
 ### Login de usuário
 POST http://localhost:5000/users/login

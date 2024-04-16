@@ -5,6 +5,20 @@ const getUserByToken = require('../helpers/getUserByToken');
 
 module.exports = class PetController {
 
+    static async getAll (req, res) {
+        const pets = await Pet.find().sort("-createdAt");
+        res.status(200).json({ pets: pets });
+    }
+
+    static async getMyPets (req, res) {
+
+        const token = getToken(req);
+        const user = await getUserByToken(token);
+
+        const pets = await Pet.find({'user._id': user._id}).sort('-createdAt');
+        res.status(200).json({ pets });
+    }
+
     static async store (req, res) {
 
         const { name, age, weigth, color } = req.body;

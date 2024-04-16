@@ -6,6 +6,8 @@ const PetController = require('../controllers/PetController');
 const verifyToken = require('../helpers/verifyToken');
 const { imageUpload } = require('../helpers/imageUpload');
 
+router.get('/', PetController.getAll);
+router.get('/mypets', verifyToken, PetController.getMyPets);
 router.post('/store', verifyToken, imageUpload.array('images'), PetController.store);
 
 module.exports = router;
