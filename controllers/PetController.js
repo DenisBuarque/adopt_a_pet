@@ -125,14 +125,90 @@ module.exports = class PetController {
     const token = getToken(req);
     const user = await getUserByToken(token);
 
-    if(pet.user._id.toString() !== user._id.toString()) {
-        res.status(422).json({ message: "Houve um problema em processar sua solicitação!"});
-        return;
+    if (pet.user._id.toString() !== user._id.toString()) {
+      res
+        .status(422)
+        .json({ message: "Houve um problema em processar sua solicitação!" });
+      return;
     }
 
     await Pet.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "registro excluído com sucesso!"});
+    res.status(200).json({ message: "registro excluído com sucesso!" });
+  }
 
+  static async update(req, res) {
+    const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id Inválido!" });
+      return;
+    }
+
+    const pet = await Pet.findOne({ _id: id });
+    if (!pet) {
+      res.status(422).json({ message: "Pet não encontrado!" });
+      return;
+    }
+
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    if (pet.user._id.toString() !== user._id.toString()) {
+      res
+        .status(422)
+        .json({ message: "Houve um problema em processar sua solicitação!" });
+      return;
+    }
+
+    const images = req.files;
+
+    const updateData = {};
+
+    const { name, age, weight, color, available } = req.body;
+
+    if (!name) {
+      res.status(422).json({ message: "Digite o nome do pet!" });
+      return;
+    } else {
+      updateData.name = name;
+    }
+
+    if (!age) {
+      res.status(422).json({ message: "Digite a idade do pet!" });
+      return;
+    } else {
+      updateData.age = age;
+    }
+
+    if (!weight) {
+      res.status(422).json({ message: "Digite o peso do pet!" });
+      return;
+    } else {
+      updateData.weight = weight;
+    }
+
+    if (!color) {
+      res.status(422).json({ message: "Digite a cor do pet!" });
+      return;
+    } else {
+      updateData.color = color;
+    }
+
+    if (images.lenght === 0) {
+      res.status(422).json({ message: "A imagem é obrigatório!" });
+      return;
+    } else {
+      updateData.images = [];
+      images.map((image) => {
+        updateData.images.push(images.filename);
+      });
+    }
+
+    await Pet.findByIdAndUpdate(id, updateData);
+
+    res
+      .status(200)
+      .json({ message: "Registro do pet atualizado com sucesso!" });
   }
 };
