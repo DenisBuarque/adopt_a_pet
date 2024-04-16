@@ -172,14 +172,25 @@ module.exports = class UserController {
     }
 
     if (password !== confirmPassword) {
-      res
-        .status(422)
-        .json({
-          message: "As senha e confirmação de senha precisam ser iguais.",
-        });
+      res.status(422).json({
+        message: "As senha e confirmação de senha precisam ser iguais.",
+      });
       return;
+    } else if (password === confirmPassword && password !== null) {
+      //create password hash
+      const salt = await bcrypt.genSalt(12);
+      const hashPassword = await bcrypt.hash(password, salt);
+
+      user.password = hashPassword;
     }
 
-    res.status(200).json({ message: "Registro atualizado com sucesso!" });
+  
+    try {
+      await User.findByIdAndUpdate({_id: user.id}, {$set: user}, {new: true});
+      res.status(200).json({ message: "Registro de usuário atualizado com sucesso!"});
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+
   }
 };

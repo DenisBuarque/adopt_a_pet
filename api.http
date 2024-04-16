@@ -1,0 +1,34 @@
+### Gegando usuário
+GET http://localhost:5000/users/edit/661e710c1ac4c02d7e67e19b
+
+### Login de usuário
+POST http://localhost:5000/users/login
+content-type: application/json
+{
+    "email": "denisbuarque@gmail.com",
+    "password": "412563",
+}
+
+
+### Cadastrar usuário
+POST http://localhost:5000/users/store
+content-type: application/json
+
+{
+    "name": "sample",
+    "phone": "988365125",
+    "email": "denisbuarque@gmail.com",
+    "password": "123456",
+    "confirmPassword": "123456"
+}
+
+### Atualizar usuário
+PATCH http://localhost:5000/users/update/661e710c1ac4c02d7e67e19b
+content-type: application/json
+{
+    "name": "Denis",
+    "phone": "988365125",
+    "email": "denisbuarque@gmail.com",
+    "password": "412563",
+    "confirmPassword": "412563"
+}
