@@ -128,11 +128,15 @@ module.exports = class UserController {
 
     const { name, phone, email, password, confirmPassword } = req.body;
 
-    const image = "";
-
     // get token user in page
     const token = getToken(req);
     const user = await getUserByToken(token);
+
+    let image = "";
+
+    if(req.file) {
+      user.image = req.file.filename;
+    }
 
     if (!name) {
       res.status(422).json({ message: "Digite seu nome." });
@@ -184,7 +188,6 @@ module.exports = class UserController {
       user.password = hashPassword;
     }
 
-  
     try {
       await User.findByIdAndUpdate({_id: user.id}, {$set: user}, {new: true});
       res.status(200).json({ message: "Registro de usuário atualizado com sucesso!"});
