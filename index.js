@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const connection = require('./database/connection');
 
 const UserRouter = require('./routes/UserRouter');
+const PetRouter = require('./routes/PetRouter');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.static('public'));
 
 // routes
 app.use('/users', UserRouter);
+app.use('/pets', PetRouter);
 
 app.listen(5000, () => {
     console.log("Servidor rodando na porta 5000");
