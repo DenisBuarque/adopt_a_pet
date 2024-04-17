@@ -10,20 +10,24 @@ import Register from "./pages/Auth/Register";
 import Navbar from "./components/Navbar";
 import Container from "./components/Container";
 import Footer from "./components/Footer";
+// Context
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Container>
-      <Footer />
+      <UserProvider>
+        <Navbar />
+        <Container>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Container>
+        <Footer />
+      </UserProvider>
     </BrowserRouter>
   );
 }
