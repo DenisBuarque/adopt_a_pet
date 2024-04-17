@@ -13,6 +13,7 @@ router.get('/show/:id', verifyToken, PetController.getPetById);
 router.post('/store', verifyToken, imageUpload.array('images'), PetController.store);
 router.patch('/update/:id', verifyToken, imageUpload.array('images'), PetController.update);
 router.patch('/schedule/:id', verifyToken, PetController.schedule);
+router.patch('/conclude/adoption/:id', verifyToken, PetController.concludeAdoption);
 router.delete('/delete/:id', verifyToken, PetController.delete);
 
 module.exports = router;

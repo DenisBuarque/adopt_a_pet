@@ -273,7 +273,7 @@ module.exports = class PetController {
         return;
       }
     }
-    
+
     pet.adopter = {
       _id: user._id,
       name: user.name,
@@ -287,5 +287,40 @@ module.exports = class PetController {
     res.status(200).json({
       message: `Sua visita foi agendada com sucesso, entre em contato com ${pet.user.name} pelo telefone ${pet.user.phone} ou pelo e-mail ${pet.user.email}.`,
     });
+  }
+
+  static async concludeAdoption(req, res) {
+    const id = req.params.id;
+
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id Inválido!" });
+      return;
+    }
+
+    const pet = await Pet.findOne({ _id: id });
+    if (!pet) {
+      res.status(422).json({ message: "Pet não encontrado!" });
+      return;
+    }
+
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    if (pet.user._id.toString() === user._id.toString()) {
+      res
+        .status(422)
+        .json({ message: "Houve um problema em processar sua solicitação!" });
+      return;
+    }
+
+    pet.available = false;
+
+    await Pet.findByIdAndUpdate(id, pet);
+
+    res
+      .status(200)
+      .json({
+        message: "Parabéns! O ciclo de adoção foi finalizado com sucesso!",
+      });
   }
 };
