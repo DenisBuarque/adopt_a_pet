@@ -3,6 +3,8 @@ const Pet = require("../models/Pet");
 const getToken = require("../helpers/getToken");
 const getUserByToken = require("../helpers/getUserByToken");
 const ObjectId = require("mongoose").Types.ObjectId;
+const fs = require("fs");
+const { unlink } = require("fs/promises");
 
 module.exports = class PetController {
   static async getAll(req, res) {
@@ -70,7 +72,7 @@ module.exports = class PetController {
       return;
     }
 
-    if (images.lenght === 0) {
+    if (images.length === 0) {
       res.status(422).json({ message: "Adicione pelo menos uma imagem!" });
       return;
     }
@@ -132,6 +134,20 @@ module.exports = class PetController {
       return;
     }
 
+    if (pet.images.length > 0) {
+      pet.images.map((img) => {
+        let filename = fs.readdirSync("public/assets/pets").includes(img);
+        console.log(filename);
+        if (filename) {
+          fs.unlink(`public/assets/pets/${img}`, function (err) {
+            if (err) {
+              throw err;
+            }
+          });
+        }
+      });
+    }
+
     await Pet.findByIdAndDelete(id);
 
     res.status(200).json({ message: "registro excluído com sucesso!" });
@@ -163,49 +179,62 @@ module.exports = class PetController {
 
     const images = req.files;
 
-    const updateData = {};
+    const data = {};
 
-    const { name, age, weight, color, available } = req.body;
+    const { name, age, weigth, color } = req.body;
 
     if (!name) {
       res.status(422).json({ message: "Digite o nome do pet!" });
       return;
     } else {
-      updateData.name = name;
+      data.name = name;
     }
 
     if (!age) {
       res.status(422).json({ message: "Digite a idade do pet!" });
       return;
     } else {
-      updateData.age = age;
+      data.age = age;
     }
 
-    if (!weight) {
+    if (!weigth) {
       res.status(422).json({ message: "Digite o peso do pet!" });
       return;
     } else {
-      updateData.weight = weight;
+      data.weigth = weigth;
     }
 
     if (!color) {
       res.status(422).json({ message: "Digite a cor do pet!" });
       return;
     } else {
-      updateData.color = color;
+      data.color = color;
     }
 
-    if (images.lenght === 0) {
-      res.status(422).json({ message: "A imagem é obrigatório!" });
-      return;
-    } else {
-      updateData.images = [];
-      images.map((image) => {
-        updateData.images.push(images.filename);
+    if (images.length > 0) {
+      pet.images.map((img) => {
+        let filename = fs.readdirSync("public/assets/pets").includes(img);
+        if (filename) {
+          fs.unlink(`public/assets/pets/${img}`, function (err) {
+            if (err) {
+              throw err;
+            }
+          });
+        }
       });
     }
 
-    await Pet.findByIdAndUpdate(id, updateData);
+    if (images.length === 0) {
+      res.status(422).json({ message: "A imagem é obrigatório!" });
+      return;
+    } else {
+      data.images = [];
+      images.map((image) => {
+        data.images.push(image.filename);
+      });
+    }
+
+    await Pet.findByIdAndUpdate(id, data);
 
     res
       .status(200)
