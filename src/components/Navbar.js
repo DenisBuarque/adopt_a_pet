@@ -78,7 +78,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="text-gray-700 hover:text-gray-900">
-              <Link to="/" className="block">
+              <Link to="/about" className="block">
                 Sobre
               </Link>
             </li>
@@ -88,7 +88,7 @@ const Navbar = () => {
               to="/register"
               className="block text-gray-700 hover:text-gray-900"
             >
-              Registra-se
+              Registrar-se
             </Link>
             <Link
               to="/login"

@@ -17,19 +17,16 @@ const Footer = () => {
       </div>
       <ul className="items-center justify-center mt-8 space-y-5 sm:flex sm:space-x-4 sm:space-y-0">
         <li className=" hover:text-gray-800">
-          <Link to="">About</Link>
+          <Link to="/">Home</Link>
         </li>
         <li className=" hover:text-gray-800">
-          <Link to="">Blog</Link>
+          <Link to="/about">Sobre</Link>
         </li>
         <li className=" hover:text-gray-800">
-          <Link to="">Team</Link>
+          <Link to="/login">Log in</Link>
         </li>
         <li className=" hover:text-gray-800">
-          <Link to="">careers</Link>
-        </li>
-        <li className=" hover:text-gray-800">
-          <Link to="">Support</Link>
+          <Link to="/register">Registrar-se</Link>
         </li>
       </ul>
       <div className="mt-8 items-center justify-between sm:flex">
