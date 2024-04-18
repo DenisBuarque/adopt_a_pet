@@ -7,16 +7,14 @@ import { Context } from "../context/UserContext";
 const Navbar = () => {
   const [state, setState] = useState(false);
   //context
-  const { authenticated } = useContext(Context);
+  const { authenticated, logout } = useContext(Context);
 
   useEffect(() => {
-    document.onclick = (e) => {
+    document.onClick = (e) => {
       const target = e.target;
       if (!target.closest(".menu-btn")) setState(false);
     };
   }, []);
-
-  console.log(authenticated);
 
   return (
     <nav
@@ -89,6 +87,11 @@ const Navbar = () => {
                 Sobre
               </Link>
             </li>
+            <li className="text-gray-700 hover:text-gray-900">
+              <Link to="/" className="block">
+                Lei de Maustratos
+              </Link>
+            </li>
           </ul>
 
           <div className="flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0">
@@ -107,7 +110,7 @@ const Navbar = () => {
                   Perfil
                 </Link>
                 <Link
-                  to="/"
+                  to="/" onClick={logout}
                   className="flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-red-800 hover:bg-red-700 active:bg-red-900 rounded-full md:inline-flex"
                 >
                   Log out

@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+// Context
+import { Context } from "../../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // Context
+  const { login } = useContext(Context);
+
+  const user = {
+    email,
+    password
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Cadastra usuário...");
+    login(user);
   };
 
   return (

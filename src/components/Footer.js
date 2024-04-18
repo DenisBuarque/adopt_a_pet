@@ -5,7 +5,7 @@ import { Context } from "../context/UserContext";
 
 const Footer = () => {
   // Context
-  const { authenticated } = useContext(Context);
+  const { authenticated, logout } = useContext(Context);
 
   return (
     <footer className="text-gray-500 bg-white px-4 py-5 md:px-8">
@@ -39,7 +39,7 @@ const Footer = () => {
               <Link to="/">Perfil</Link>
             </li>
             <li className=" hover:text-gray-800">
-              <Link to="/">Log out</Link>
+              <Link to="/" onClick={logout}>Log out</Link>
             </li>
           </>
         ) : (
