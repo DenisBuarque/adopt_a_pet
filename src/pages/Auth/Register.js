@@ -90,7 +90,7 @@ const Register = () => {
             className="border rounded p-2 w-full"
           />
         </div>
-        <button type="submit" className="bg-blue-800 p-3 w-full text-center text-white rounded-md">Cadastrar dados</button>
+        <button type="submit" className="bg-blue-800 p-3 w-full text-center text-white rounded-md">Cadastrar Dados</button>
         <p className="mt-8">Já tem conta? <Link to="/login" className="font-bold">Clique aqui</Link></p>
       </form>
     </section>

@@ -104,7 +104,7 @@ const Navbar = () => {
                   Dashboard
                 </Link>
                 <Link
-                  to="/"
+                  to="/profile"
                   className="block text-gray-700 hover:text-gray-900"
                 >
                   Perfil
