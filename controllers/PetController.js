@@ -32,7 +32,7 @@ module.exports = class PetController {
     const id = req.params.id;
 
     if (!ObjectId.isValid(id)) {
-      res.status(422).json({ message: "Id Inválido!" });
+      res.status(422).json({ message: "Id inválido!" });
       return;
     }
 
@@ -46,34 +46,39 @@ module.exports = class PetController {
   }
 
   static async store(req, res) {
-    const { name, age, weigth, color } = req.body;
+    const { name, age, weigth, color, description } = req.body;
 
     const available = true;
 
     const images = req.files;
 
     if (!name) {
-      res.status(422).json({ message: "Digite o nome do pet!" });
+      res.status(422).json({ message: "Por favor, digite o nome do pet!" });
       return;
     }
 
     if (!age) {
-      res.status(422).json({ message: "Digite a idade do pet!" });
+      res.status(422).json({ message: "Por favor, digite a idade do pet!" });
       return;
     }
 
     if (!weigth) {
-      res.status(422).json({ message: "Digite o peso do pet!" });
+      res.status(422).json({ message: "Por favor, digite o peso do pet!" });
       return;
     }
 
     if (!color) {
-      res.status(422).json({ message: "Digite a cor do pet!" });
+      res.status(422).json({ message: "Por favor, digite a cor do pet!" });
+      return;
+    }
+
+    if (!description) {
+      res.status(422).json({ message: "Por favor, digite a descrição do pet!" });
       return;
     }
 
     if (images.length === 0) {
-      res.status(422).json({ message: "Adicione pelo menos uma imagem!" });
+      res.status(422).json({ message: "Por favor, adicione pelo menos uma imagem do pet!" });
       return;
     }
 
@@ -85,6 +90,7 @@ module.exports = class PetController {
       age,
       weigth,
       color,
+      description,
       available,
       images: [],
       user: {
@@ -104,7 +110,7 @@ module.exports = class PetController {
       const newPet = await pet.save(pet);
       res
         .status(201)
-        .json({ message: "Pet cadastrado com sucesso!", newPet, user });
+        .json({ message: "Registro cadastrado com sucesso!", newPet, user });
     } catch (error) {
       res.status(500).json({ message: error });
     }
@@ -150,7 +156,7 @@ module.exports = class PetController {
 
     await Pet.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "registro excluído com sucesso!" });
+    res.status(200).json({ message: "Registro excluído com sucesso!" });
   }
 
   static async update(req, res) {
@@ -181,34 +187,39 @@ module.exports = class PetController {
 
     const data = {};
 
-    const { name, age, weigth, color } = req.body;
+    const { name, age, weigth, color, description } = req.body;
 
     if (!name) {
-      res.status(422).json({ message: "Digite o nome do pet!" });
+      res.status(422).json({ message: "Por favor, digite o nome do pet!" });
       return;
     } else {
       data.name = name;
     }
 
     if (!age) {
-      res.status(422).json({ message: "Digite a idade do pet!" });
+      res.status(422).json({ message: "Por favor, digite a idade do pet!" });
       return;
     } else {
       data.age = age;
     }
 
     if (!weigth) {
-      res.status(422).json({ message: "Digite o peso do pet!" });
+      res.status(422).json({ message: "Por favor, digite o peso do pet!" });
       return;
     } else {
       data.weigth = weigth;
     }
 
     if (!color) {
-      res.status(422).json({ message: "Digite a cor do pet!" });
+      res.status(422).json({ message: "Por favor, digite a cor do pet!" });
       return;
     } else {
       data.color = color;
+    }
+
+    if (!description) {
+      res.status(422).json({ message: "Por favor, digite a descrição do pet!" });
+      return;
     }
 
     if (images.length > 0) {
@@ -238,7 +249,7 @@ module.exports = class PetController {
 
     res
       .status(200)
-      .json({ message: "Registro do pet atualizado com sucesso!" });
+      .json({ message: "Registro atualizado com sucesso!" });
   }
 
   static async schedule(req, res) {
