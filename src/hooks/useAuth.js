@@ -4,28 +4,46 @@ import { useNavigate } from "react-router-dom";
 import useFlashMessage from "./useFlashMessage";
 
 const useAuth = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  const { setMessage } = useFlashMessage();
 
-    const { setMessage } = useFlashMessage();
+  const navigate = useNavigate();
 
-    async function register(user) {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      setAuthenticated(true);
+    }
+  }, []);
 
-        let msgText = "Cadastro realizado com sucesso!";
-        let msgType = "bg-green-600";
+  async function register(user) {
+    let msgText = "Cadastro realizado com sucesso!";
+    let msgType = "bg-green-600";
 
-        try {
-            const data = await api.post('/users/store', user).then((response) => {
-                return response.data;
-            });
-            console.log(data);
-        } catch (error) {
-            msgText = error.response.data.message;
-            msgType = "bg-red-600";
-        }
+    try {
+      const data = await api.post("/users/store", user).then((response) => {
+        return response.data;
+      });
 
-        setMessage(msgText, msgType);
+      await authUser(data);
+    } catch (error) {
+      msgText = error.response.data.message;
+      msgType = "bg-red-600";
     }
 
-    return { register };
-}
+    setMessage(msgText, msgType);
+  }
+
+  async function authUser(data) {
+    setAuthenticated(true);
+
+    localStorage.setItem("token", JSON.stringify(data.token));
+
+    navigate("/");
+  }
+
+  return { register, authenticated };
+};
 
 export default useAuth;
