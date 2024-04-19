@@ -35,7 +35,7 @@ const Footer = () => {
         {authenticated ? (
           <>
             <li className=" hover:text-gray-800">
-              <Link to="/">Dashborad</Link>
+              <Link to="/mypets">My Pets</Link>
             </li>
             <li className=" hover:text-gray-800">
               <Link to="/profile">Perfil</Link>

@@ -93,7 +93,7 @@ const Profile = () => {
   };
 
   return (
-    <section className="max-w-lg m-auto border p-9 rounded-md shadow">
+    <section className="max-w-xl m-auto border p-9 rounded-md shadow">
       <h1 className="text-2xl font-semibold mb-4">Profile</h1>
       <p>
         Mantenha seus dados atualizados para poder adotar um pet para ter uma

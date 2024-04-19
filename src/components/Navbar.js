@@ -98,10 +98,10 @@ const Navbar = () => {
             {authenticated ? (
               <>
                 <Link
-                  to="/"
+                  to="/mypets"
                   className="block text-gray-700 hover:text-gray-900"
                 >
-                  Dashboard
+                  My Pets
                 </Link>
                 <Link
                   to="/profile"

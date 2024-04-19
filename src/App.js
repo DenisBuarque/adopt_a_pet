@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Lei from "./pages/Lei";
+import MyPets from "./pages/MyPets";
+import AddPet from "./pages/AddPet";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Auth/Profile";
@@ -27,6 +29,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/lei" element={<Lei />} />
+            <Route path="/mypets" element={<MyPets />} />
+            <Route path="/addpet" element={<AddPet />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
