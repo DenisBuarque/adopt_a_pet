@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FaHeart, FaComment } from "react-icons/fa";
 
 const Home = () => {
-
   const [search, setSearch] = useState("");
 
   const posts = [
@@ -43,8 +43,7 @@ const Home = () => {
   return (
     <section className="md:mb-20">
       <div className="mb-2">
-        <form className="w-full"
-        >
+        <form className="w-full">
           <div className="relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +60,7 @@ const Home = () => {
               />
             </svg>
             <input
-              type="search" 
+              type="search"
               name="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -77,36 +76,39 @@ const Home = () => {
             className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
             key={key}
           >
-            <Link to="/">
+            <div className="relative">
+              <div className="absolute bottom-2 right-2">
+                <Link><FaHeart className="w-7 h-7 text-white mb-3" /></Link>
+                <Link><FaComment className="w-7 h-7 text-white" /></Link>
+              </div>
               <img
                 src={items.img}
                 loading="lazy"
                 alt={items.title}
                 className="w-full h-48 rounded-t-md"
               />
-
-              <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
-                <div className="flex-none w-10 h-10 rounded-full">
-                  <img
-                    src={items.authorLogo}
-                    className="w-full h-full rounded-full"
-                    alt={items.authorName}
-                  />
-                </div>
-                <div className="ml-3">
-                  <span className="block text-gray-900">
-                    {items.authorName}
-                  </span>
-                  <span className="block text-gray-400 text-sm">
-                    {items.date}
-                  </span>
-                </div>
+            </div>
+            <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
+              <div className="flex-none w-10 h-10 rounded-full">
+                <img
+                  src={items.authorLogo}
+                  className="w-full h-full rounded-full"
+                  alt={items.authorName}
+                />
               </div>
-              <div className="pt-3 ml-4 mr-2 mb-3">
+              <div className="ml-3">
+                <span className="block text-gray-900">{items.authorName}</span>
+                <span className="block text-gray-400 text-sm">
+                  {items.date}
+                </span>
+              </div>
+            </div>
+            <div className="pt-3 ml-4 mr-2 mb-3">
+              <Link to="/">
                 <h3 className="text-xl text-gray-900">{items.title}</h3>
-                <p className="text-gray-400 text-sm mt-1">{items.desc}</p>
-              </div>
-            </Link>
+              </Link>
+              <p className="text-gray-400 text-sm mt-1">{items.desc}</p>
+            </div>
           </article>
         ))}
       </div>
