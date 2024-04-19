@@ -29,7 +29,9 @@ const Footer = () => {
         <li className=" hover:text-gray-800">
           <Link to="/about">Sobre</Link>
         </li>
-
+        <li className=" hover:text-gray-800">
+          <Link to="/lei">Lei de Maustrato</Link>
+        </li>
         {authenticated ? (
           <>
             <li className=" hover:text-gray-800">

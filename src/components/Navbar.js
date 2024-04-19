@@ -88,7 +88,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="text-gray-700 hover:text-gray-900">
-              <Link to="/" className="block">
+              <Link to="/lei" className="block">
                 Lei de Maustratos
               </Link>
             </li>
