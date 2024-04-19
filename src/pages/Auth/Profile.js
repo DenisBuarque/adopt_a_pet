@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
 import ImageNotFound from "../../assets/images/photo-not-found.png";
+import PreviewImage from "../../components/PreviewImage";
 
 // Context
 import { Context } from "../../context/UserContext";
@@ -74,24 +75,9 @@ const Profile = () => {
   }
 
   // create image preview
-  const imageMimeType = /image\/(png|jpeg|jpg)/i;
-
-  // cria uma visualização sempre que o arquivo selecionado for alterado
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
-
-    // liberar memória sempre que este componente for desmontado
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+  const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
   const onSelectFile = (e) => {
-
     let file = e.target.files[0];
 
     if (!file.type.match(imageMimeType)) {
@@ -113,24 +99,14 @@ const Profile = () => {
         Mantenha seus dados atualizados para poder adotar um pet para ter uma
         experiência transformadora e enriquecedora.
       </p>
-
-      <div className="flex justify-center py-5">
-        {image || selectedFile ? (
-          <img
-            src={
-              preview ? preview : `http://localhost:5000/assets/users/${image}`
-            }
-            alt="avatar"
-            className="w-44 h-44 rounded-full border-8"
-          />
-        ) : (
-          <img
-            src={ImageNotFound}
-            alt="Avatar"
-            className="w-28 h-28 rounded-full bg-gray-400"
-          />
-        )}
-      </div>
+      
+      <PreviewImage
+        image={image}
+        selectedFile={selectedFile}
+        preview={preview}
+        ImageNotFound={ImageNotFound} 
+        setPreview={setPreview}
+      />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
