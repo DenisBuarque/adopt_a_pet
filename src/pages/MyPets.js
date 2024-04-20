@@ -1,8 +1,27 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import api from "../utils/api";
+import useFlashMessage from "../hooks/useFlashMessage";
 
 const MyPets = () => {
+  const [pets, setPets] = useState([]);
+  const [token] = useState(localStorage.getItem("token") || "");
+
+  const { setMessage } = useFlashMessage();
+
+  useEffect(() => {
+    api
+      .get("/pets/mypets", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        setPets(response.data.pets);
+      });
+  }, [token]);
+
   const tableItems = [
     {
       avatar:
@@ -73,47 +92,57 @@ const MyPets = () => {
           <thead className="bg-gray-50 text-gray-600 font-medium border-b">
             <tr>
               <th className="py-3 px-6">Username</th>
-              <th className="py-3 px-6">Email</th>
-              <th className="py-3 px-6">Position</th>
-              <th className="py-3 px-6">Salary</th>
+              <th className="py-3 px-6">Idade</th>
+              <th className="py-3 px-6">Peso</th>
+              <th className="py-3 px-6">Cor</th>
+              <th className="py-3 px-6">Fotos</th>
               <th className="py-3 px-6"></th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {tableItems.map((item, idx) => (
-              <tr key={idx}>
-                <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
-                  <img src={item.avatar} className="w-10 h-10 rounded-full" />
-                  <div>
-                    <span className="block text-gray-700 text-sm font-medium">
-                      {item.name}
-                    </span>
-                    <span className="block text-gray-700 text-xs">
-                      {item.email}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.phone_nimber}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.position}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.salary}</td>
-                <td className="text-right px-6 whitespace-nowrap">
-                  <a
-                    href="javascript:void()"
-                    className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Edit
-                  </a>
-                  <button
-                    href="javascript:void()"
-                    className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {pets.length > 0 &&
+              pets.map((pet) => (
+                <tr key={pet._id}>
+                  <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
+                    <img
+                      src={`http://localhost:5000/assets/pets/${pet.images[0]}`}
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div>
+                      <span className="block text-gray-700 text-sm font-medium">
+                        {pet.name}
+                      </span>
+                      <span className="block text-gray-700 text-xs">
+                        {pet.user.name}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {pet.age} ano(s)
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {pet.weigth} Kg
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{pet.color}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{pet.images.length}</td>
+                  <td className="">
+                    <div className="flex gap-1">
+                      <Link
+                        to="/mypets"
+                        className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded duration-150 hover:bg-indigo-500"
+                      >
+                        <FaEdit />
+                      </Link>
+                      <Link
+                        to="/mypets"
+                        className="flex items-center gap-2 px-4 py-2 text-white bg-red-600 rounded duration-150 hover:bg-red-500"
+                      >
+                        <FaTrash />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
