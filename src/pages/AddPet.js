@@ -1,42 +1,144 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import useFlashMessage from "../hooks/useFlashMessage";
-// Context
-import { Context } from "../context/UserContext";
 
 const AddPet = () => {
+
+  const navigate = useNavigate();
+
   const [token] = useState(localStorage.getItem("token") || "");
 
+  const [imageFiles, setImageFiles] = useState([]);
+  const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weigth, setWeigth] = useState("");
   const [color, setColor] = useState("");
-  const [description, useDescription] = useState("");
-  const [imges, setImages] = useState("");
+  const [description, setDescription] = useState("");
 
   const { setMessage } = useFlashMessage();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Cadastrar pet...");
+  //handle image pet
+  const imageType = /image\/(png|jpg|jpeg)/gm;
+
+  // handle image preview
+  const handleChangeImage = (e) => {
+
+    let msgText = "Adicione somente images no formato jpg, jpeg, png";
+    let msgType = "bg-red-600"
+
+    const { files } = e.target;
+    const validImageFiles = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.match(imageType)) {
+        validImageFiles.push(file);
+      }
+    }
+
+    if (validImageFiles.length) {
+      setImageFiles(validImageFiles);
+      return;
+    }
+
+    setMessage(msgText, msgType);
+
   };
+
+  useEffect(() => {
+    const images = [];
+    const fileReaders = [];
+    let isCancel = false;
+
+    if (imageFiles.length) {
+      imageFiles.forEach((file) => {
+        const fileReader = new FileReader();
+        fileReaders.push(fileReader);
+        fileReader.onload = (e) => {
+          const { result } = e.target;
+          if (result) {
+            images.push(result);
+          }
+          if (images.length === imageFiles.length && !isCancel) {
+            setImages(images);
+          }
+        };
+        fileReader.readAsDataURL(file);
+      });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [imageFiles]);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    let msgType = "bg-green-600";
+
+    const formData = new FormData();
+
+    for(let i = 0; i < imageFiles.length; i++) {
+        formData.append("images", imageFiles[i]);
+    }
+
+    formData.append("name", name);
+    formData.append("age", age);
+    formData.append("weigth", weigth);
+    formData.append("color", color);
+    formData.append("description", description);
+
+    const data = await api
+      .post(`/pets/store`, formData, {
+        headers: {
+          Authorization: `Beare ${JSON.parse(token)}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        msgType = "bg-red-600";
+        return error.response.data;
+      });
+
+    setMessage(data.message, msgType);
+    
+    navigate('/mypets');
+  }
 
   return (
     <section className="max-w-xl m-auto border p-9 rounded-md shadow">
-      <h1 className="text-2xl font-semibold mb-4">Profile</h1>
+      <h1 className="text-2xl font-semibold mb-4">Pet</h1>
       <p>
         Adicione seu pet para que ele possa ser visto e adotado por outros
         usuários da plataforma.
       </p>
 
+      <div className="flex justify-center flex-wrap gap-2 py-5">
+        
+        {(images || []).map((image, index) => (
+          <img src={image} alt="Pet" key={index} className="w-40 h-40 rounded-full border-8" />
+        ))}
+      </div>
+
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <input
             type="file"
-            name="image"
+            name="images"
             accept=".png, .jpg, .jpeg"
-            className="w-full" 
-            multiple
+            className="w-full"
+            multiple 
+            onChange={handleChangeImage}
           />
         </div>
         <div className="mb-2">
@@ -61,7 +163,7 @@ const AddPet = () => {
             name="age"
             placeholder="Digite a idade do pet"
             value={age}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => setAge(e.target.value)}
             className="border rounded p-2 w-full"
           />
         </div>
@@ -74,7 +176,7 @@ const AddPet = () => {
             name="weigth"
             placeholder="Digite o peso do pet"
             value={weigth}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setWeigth(e.target.value)}
             className="border rounded p-2 w-full"
           />
         </div>
@@ -87,7 +189,7 @@ const AddPet = () => {
             name="color"
             placeholder="Digiyte a cor do pet"
             value={color}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setColor(e.target.value)}
             className="border rounded p-2 w-full"
           />
         </div>
@@ -99,7 +201,7 @@ const AddPet = () => {
             name="description"
             placeholder="Digite um breve descrição sobre o pet."
             value={description}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             className="border rounded p-2 w-full"
           ></textarea>
         </div>
