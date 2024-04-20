@@ -11,6 +11,7 @@ const AddPet = () => {
 
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
+  
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weigth, setWeigth] = useState("");
@@ -19,10 +20,9 @@ const AddPet = () => {
 
   const { setMessage } = useFlashMessage();
 
-  //handle image pet
+  // handle image preview
   const imageType = /image\/(png|jpg|jpeg)/gm;
 
-  // handle image preview
   const handleChangeImage = (e) => {
 
     let msgText = "Adicione somente images no formato jpg, jpeg, png";
@@ -42,9 +42,7 @@ const AddPet = () => {
       setImageFiles(validImageFiles);
       return;
     }
-
     setMessage(msgText, msgType);
-
   };
 
   useEffect(() => {
@@ -78,6 +76,7 @@ const AddPet = () => {
     };
   }, [imageFiles]);
 
+  // Add pet data
   async function handleSubmit(e) {
     e.preventDefault();
 

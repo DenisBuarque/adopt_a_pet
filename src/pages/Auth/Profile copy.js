@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
 import ImageNotFound from "../../assets/images/photo-not-found.png";
-import PreviewImage from "../../assets/images/photo-not-found.png";
+import PreviewImage from "../../components/PreviewImage";
 
 // Context
 import { Context } from "../../context/UserContext";
@@ -12,6 +12,7 @@ const Profile = () => {
   const [token] = useState(localStorage.getItem("token") || "");
 
   const [file, setFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
   const [id, setId] = useState("");
@@ -24,7 +25,6 @@ const Profile = () => {
 
   const { setMessage } = useFlashMessage();
 
-  // Loading data in form
   useEffect(() => {
     api
       .get("/users/checkuser", {
@@ -42,47 +42,6 @@ const Profile = () => {
       });
   }, [token]);
 
-  // handle image preview
-  const imageType = /image\/(png|jpg|jpeg)/i;
-
-  const handleChangeImage = (e) => {
-    let msgText = "Adicione somente imagens no formato PNG, JPG, JPEG";
-    let msgType = "bg-red-600";
-
-    const file = e.target.files[0];
-
-    if (file !== undefined) {
-      if (!file.type.match(imageType)) {
-        setMessage(msgText, msgType);
-        return;
-      }
-      setFile(file);
-    }
-  };
-
-  useEffect(() => {
-    let fileReader;
-    let isCancel = false;
-
-    if (file) {
-      fileReader = new FileReader();
-      fileReader.onload = (e) => {
-        const { result } = e.target;
-        if (result && !isCancel) {
-          setPreview(result);
-        }
-      };
-      fileReader.readAsDataURL(file);
-    }
-    return () => {
-      isCancel = true;
-      if (fileReader && fileReader.readyState === 1) {
-        fileReader.abort();
-      }
-    };
-  }, [file]);
-
-  // Update user data
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -90,7 +49,7 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append("_id", id);
-    formData.append("image", file);
+    formData.append("image", selectedFile);
     formData.append("name", name);
     formData.append("email", email);
     formData.append("phone", phone);
@@ -115,6 +74,24 @@ const Profile = () => {
     setMessage(data.message, msgType);
   }
 
+  // create image preview
+  const imageMimeType = /image\/(png|jpg|jpeg)/i;
+
+  const onSelectFile = (e) => {
+    let file = e.target.files[0];
+
+    if (!file.type.match(imageMimeType)) {
+      let msgText = "Adicione somente imagens no formato PNG, JPG, JPEG";
+      let msgType = "bg-red-600";
+      setMessage(msgText, msgType);
+      setSelectedFile(undefined);
+      setFile("");
+      return;
+    } else {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   return (
     <section className="max-w-xl m-auto border p-9 rounded-md shadow">
       <h1 className="text-2xl font-semibold mb-4">Profile</h1>
@@ -122,41 +99,24 @@ const Profile = () => {
         Mantenha seus dados atualizados para poder adotar um pet para ter uma
         experiência transformadora e enriquecedora.
       </p>
-
-      {/*<PreviewImage
+      
+      <PreviewImage
         image={image}
         selectedFile={selectedFile}
         preview={preview}
         ImageNotFound={ImageNotFound} 
         setPreview={setPreview}
-  />*/}
-
-      <div className="flex justify-center items-center my-7">
-        {image || preview ? (
-          <img
-            src={
-              preview ? preview : `http://localhost:5000/assets/users/${image}`
-            }
-            alt={name}
-            className="w-48 h-48 rounded-full border-4"
-          />
-        ) : (
-          <img
-            src={ImageNotFound}
-            alt="Avatar"
-            className="w-28 h-28 rounded-full bg-gray-400"
-          />
-        )}
-      </div>
+      />
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <input
             type="file"
             name="image"
+            value={file}
             accept=".png, .jpg, .jpeg"
-            onChange={handleChangeImage}
-            className="w-full"
+            onChange={onSelectFile}
+            className="w-full" multiple={true}
           />
         </div>
         <div className="mb-2">
