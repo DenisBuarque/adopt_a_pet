@@ -22,50 +22,26 @@ const MyPets = () => {
       });
   }, [token]);
 
-  const tableItems = [
-    {
-      avatar:
-        "https://images.unsplash.com/photo-1511485977113-f34c92461ad9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ",
-      name: "Liam James",
-      email: "liamjames@example.com",
-      phone_nimber: "+1 (555) 000-000",
-      position: "Software engineer",
-      salary: "$100K",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/men/86.jpg",
-      name: "Olivia Emma",
-      email: "oliviaemma@example.com",
-      phone_nimber: "+1 (555) 000-000",
-      position: "Product designer",
-      salary: "$90K",
-    },
-    {
-      avatar: "https://randomuser.me/api/portraits/women/79.jpg",
-      name: "William Benjamin",
-      email: "william.benjamin@example.com",
-      phone_nimber: "+1 (555) 000-000",
-      position: "Front-end developer",
-      salary: "$80K",
-    },
-    {
-      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg",
-      name: "Henry Theodore",
-      email: "henrytheodore@example.com",
-      phone_nimber: "+1 (555) 000-000",
-      position: "Laravel engineer",
-      salary: "$120K",
-    },
-    {
-      avatar:
-        "https://images.unsplash.com/photo-1439911767590-c724b615299d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ",
-      name: "Amelia Elijah",
-      email: "amelia.elijah@example.com",
-      phone_nimber: "+1 (555) 000-000",
-      position: "Open source manager",
-      salary: "$75K",
-    },
-  ];
+  async function handleDelete (id) {
+
+    let msgType = "bg-green-600";
+
+    const data = await api.delete(`/pets/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(token)}`,
+      }
+    }).then((response) => {
+      const updateListPets = pets.filter((pet) => pet._id !== id);
+      setPets(updateListPets);
+
+      return response.data;
+    }).catch((error) => {
+      msgType = 'bg-red-600';
+      return error.response.data;
+    });
+
+    setMessage(data.message, msgType);
+  }
 
   return (
     <section className="px-4 md:px-8">
@@ -91,15 +67,17 @@ const MyPets = () => {
         <table className="w-full table-auto text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 font-medium border-b">
             <tr>
-              <th className="py-3 px-6">Username</th>
+              <th className="py-3 px-6">Pet</th>
               <th className="py-3 px-6">Idade</th>
               <th className="py-3 px-6">Peso</th>
               <th className="py-3 px-6">Cor</th>
-              <th className="py-3 px-6">Fotos</th>
+              <th className="py-3 px-6">Status</th>
+              <th className="py-3 px-6 text-center">Fotos</th>
               <th className="py-3 px-6"></th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
+            {pets.length == 0 && <p>Não há pets cadastros no momento.</p>}
             {pets.length > 0 &&
               pets.map((pet) => (
                 <tr key={pet._id}>
@@ -117,16 +95,21 @@ const MyPets = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     {pet.age} ano(s)
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     {pet.weigth} Kg
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{pet.color}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{pet.images.length}</td>
-                  <td className="">
-                    <div className="flex gap-1">
+                  <td className="px-6 py-4">{pet.color}</td>
+                  <td className="px-6 py-4">
+                    {pet.available ? (<p>Em adoção</p>) : (<p>Adotado</p>)}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    {pet.images.length}
+                  </td>
+                  <td className="float-right">
+                    <div className="flex gap-1 mr-2">
                       <Link
                         to="/mypets"
                         className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded duration-150 hover:bg-indigo-500"
@@ -134,7 +117,7 @@ const MyPets = () => {
                         <FaEdit />
                       </Link>
                       <Link
-                        to="/mypets"
+                        onClick={() => handleDelete(pet._id)}
                         className="flex items-center gap-2 px-4 py-2 text-white bg-red-600 rounded duration-150 hover:bg-red-500"
                       >
                         <FaTrash />
