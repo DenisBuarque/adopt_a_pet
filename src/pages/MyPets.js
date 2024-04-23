@@ -77,14 +77,14 @@ const MyPets = () => {
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {pets.length == 0 && <p>Não há pets cadastros no momento.</p>}
+            {pets.length === 0 && <p>Não há pets cadastros no momento.</p>}
             {pets.length > 0 &&
               pets.map((pet) => (
                 <tr key={pet._id}>
                   <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                     <img
                       src={`http://localhost:5000/assets/pets/${pet.images[0]}`}
-                      className="w-10 h-10 rounded-full"
+                      className="w-10 h-10 rounded-full" alt={pet.name}
                     />
                     <div>
                       <span className="block text-gray-700 text-sm font-medium">
@@ -111,7 +111,7 @@ const MyPets = () => {
                   <td className="float-right">
                     <div className="flex gap-1 mr-2">
                       <Link
-                        to="/mypets"
+                        to={`/editpet/${pet._id}`}
                         className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded duration-150 hover:bg-indigo-500"
                       >
                         <FaEdit />
