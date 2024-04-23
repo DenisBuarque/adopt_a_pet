@@ -80,7 +80,7 @@ const MyPets = () => {
             {pets.length === 0 && <p>Não há pets cadastros no momento.</p>}
             {pets.length > 0 &&
               pets.map((pet) => (
-                <tr key={pet._id}>
+                <tr key={pet.id}>
                   <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                     <img
                       src={`http://localhost:5000/assets/pets/${pet.images[0]}`}

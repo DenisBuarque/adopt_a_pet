@@ -135,7 +135,6 @@ const EditPet = () => {
 
     setMessage(data.message, msgType);
 
-    navigate("/mypets");
   }
 
   return (

@@ -122,10 +122,10 @@ const AddPet = () => {
         usuários da plataforma.
       </p>
 
-      <div className="flex justify-center flex-wrap gap-2 py-5">
+      <div className="flex justify-start flex-wrap gap-2 py-5">
         
         {(images || []).map((image, index) => (
-          <img src={image} alt="Pet" key={index} className="w-40 h-40 rounded-full border-8" />
+          <img src={image} alt="Pet" key={index} className="w-28 h-28 rounded-full border-4" />
         ))}
       </div>
 
