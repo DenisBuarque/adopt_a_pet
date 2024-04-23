@@ -1,54 +1,26 @@
-import api from "../utils/api";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
 import useFlashMessage from "../hooks/useFlashMessage";
 
-const EditPet = () => {
-  const { id } = useParams();
+const FormPet = ({ handleSubmit, petData }) => {
 
-  //const [pet, setPet] = useState({});
-  const [token] = useState(localStorage.getItem("token") || "");
+  const [pet, setPet] = useState({name: "pet", age: 2, weight: 1, color: "azul", description: "lalala"});
 
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
-
   const [imagesPet, setImagesPet] = useState([]);
 
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [weigth, setWeigth] = useState("");
-  const [color, setColor] = useState("");
-  const [description, setDescription] = useState("");
-
-  const navigate = useNavigate();
+  const [name, setName] = useState(pet.name || "");
+  const [age, setAge] = useState(pet.age || "");
+  const [weigth, setWeigth] = useState(pet.weigth || "");
+  const [color, setColor] = useState(pet.color || "");
+  const [description, setDescription] = useState(pet.description || "");
 
   const { setMessage } = useFlashMessage();
-
-  // List data pet
-  useEffect(() => {
-    api
-      .get(`/pets/show/${id}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
-        },
-      })
-      .then((response) => {
-        //setPet(response.data.pet);
-        setImagesPet(response.data.pet.images);
-        setName(response.data.pet.name);
-        setAge(response.data.pet.age);
-        setWeigth(response.data.pet.weigth);
-        setColor(response.data.pet.color);
-        setDescription(response.data.pet.description);
-      });
-  }, [token, id]);
 
   // handle image preview
   const imageType = /image\/(png|jpg|jpeg)/gm;
 
   const handleChangeImage = (e) => {
-
     let msgText = "Adicione somente images no formato jpg, jpeg, png";
     let msgType = "bg-red-600";
 
@@ -100,55 +72,24 @@ const EditPet = () => {
     };
   }, [imageFiles]);
 
-  // update data pet
-  async function handleSubmit(e) {
+  const data = {
+    name,
+    age,
+    weigth,
+    color,
+    description,
+    images: imageFiles,
+  };
+
+  function handleCreate(e) {
     e.preventDefault();
-
-    let msgType = "bg-green-600";
-
-    const formData = new FormData();
-
-    for (let i = 0; i < imageFiles.length; i++) {
-      formData.append("images", imageFiles[i]);
-    }
-
-    formData.append("name", name);
-    formData.append("age", age);
-    formData.append("weigth", weigth);
-    formData.append("color", color);
-    formData.append("description", description);
-
-    const data = await api
-      .patch(`/pets/update/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        msgType = "bg-red-600";
-        return error.response.data;
-      });
-
-    setMessage(data.message, msgType);
-
+    handleSubmit(data);
   }
 
   return (
-    <section className="max-w-xl m-auto border p-9 rounded-md shadow">
-      <h1 className="text-2xl font-semibold mb-4">
-        Pet Edit <span className="text-red-600">{name}</span>
-      </h1>
-      <p>
-        Mantenha os dados do seu pet atualizado para que ele possa ser visto e
-        adotado por outros usuários da plataforma.
-      </p>
-
+    <div>
       <div className="flex justify-start flex-wrap gap-2 py-5">
-        {(images.length > 0) ? (
+        {images.length > 0 ? (
           <>
             {images.map((image, index) => (
               <img
@@ -161,19 +102,20 @@ const EditPet = () => {
           </>
         ) : (
           <>
-            {imagesPet && imagesPet.map((img, index) => (
-              <img
-                src={`${process.env.REACT_APP_API}/assets/pets/${img}`}
-                alt="Pet"
-                key={index}
-                className="w-28 h-28 rounded-full border-4"
-              />
-            ))}
+            {imagesPet &&
+              imagesPet.map((img, index) => (
+                <img
+                  src={`${process.env.REACT_APP_API}/assets/pets/${img}`}
+                  alt="Pet"
+                  key={index}
+                  className="w-28 h-28 rounded-full border-4"
+                />
+              ))}
           </>
         )}
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCreate}>
         <div className="mb-4">
           <input
             type="file"
@@ -255,8 +197,8 @@ const EditPet = () => {
           Cadastrar Dados
         </button>
       </form>
-    </section>
+    </div>
   );
 };
 
-export default EditPet;
+export default FormPet;
