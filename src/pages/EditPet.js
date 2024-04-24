@@ -1,10 +1,7 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
 import useFlashMessage from "../hooks/useFlashMessage";
-
-import FormPet from "../components/FormPet";
 
 const EditPet = () => {
   const { id } = useParams();
@@ -12,8 +9,6 @@ const EditPet = () => {
   const [token] = useState(localStorage.getItem("token") || "");
 
   const { setMessage } = useFlashMessage();
-
-  //const [pet, setPet] = useState({});
 
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
@@ -25,6 +20,8 @@ const EditPet = () => {
   const [color, setColor] = useState("");
   const [description, setDescription] = useState("");
 
+  const [pet, setPet] = useState({});
+
   // List data pet
   useEffect(() => {
     api
@@ -34,7 +31,8 @@ const EditPet = () => {
         },
       })
       .then((response) => {
-        //setPet(response.data.pet);
+        setPet(response.data.pet);
+
         setImagesPet(response.data.pet.images);
         setName(response.data.pet.name);
         setAge(response.data.pet.age);
@@ -42,7 +40,19 @@ const EditPet = () => {
         setColor(response.data.pet.color);
         setDescription(response.data.pet.description);
       });
+
+      return () => {
+        setPet({});
+        setImagesPet([]);
+        setName("");
+        setAge("");
+        setWeigth("");
+        setColor("");
+        setDescription("");
+      }
   }, [token, id]);
+
+  console.log(pet);
 
   // handle image preview
   const imageType = /image\/(png|jpg|jpeg)/gm;
@@ -97,6 +107,7 @@ const EditPet = () => {
           fileReader.abort();
         }
       });
+      setImages([]);
     };
   }, [imageFiles]);
 

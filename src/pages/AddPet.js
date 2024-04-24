@@ -69,6 +69,7 @@ const AddPet = () => {
           fileReader.abort();
         }
       });
+      setImages([]);
     };
   }, [imageFiles]);
 

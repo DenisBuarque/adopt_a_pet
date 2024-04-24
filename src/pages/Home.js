@@ -12,6 +12,10 @@ const Home = () => {
     api.get("/pets").then((response) => {
       setPets(response.data.pets);
     });
+    // Clean nup functoin
+    return () => {
+      setPets([]);
+    }
   }, []);
 
   return (

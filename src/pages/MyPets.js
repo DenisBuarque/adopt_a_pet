@@ -20,6 +20,10 @@ const MyPets = () => {
       .then((response) => {
         setPets(response.data.pets);
       });
+
+      return () => {
+        setPets([]);
+      }
   }, [token]);
 
   async function handleDelete(id) {

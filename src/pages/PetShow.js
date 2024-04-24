@@ -18,6 +18,7 @@ const PetShow = () => {
     });
   }, [id]);
 
+
   async function schedule() {
     let msgType = "bg-green-600";
 
@@ -48,7 +49,7 @@ const PetShow = () => {
       <div className="grid grid-cols-3 gap-4 mb-6">
         {pet.images &&
           pet.images.map((image, index) => (
-            <div>
+            <div key={index}>
               <img
                 src={process.env.REACT_APP_API + `/assets/pets/` + image}
                 alt={pet.name}
@@ -88,7 +89,7 @@ const PetShow = () => {
           {token ? (
             <div className="text-center mt-5">
               <button onClick={schedule} type="button" className="px-5 py-3 text-white duration-150 bg-blue-800 rounded-full hover:bg-blue-800">
-                Agendar visita para esse pet
+                Agendar uma visita
               </button>
             </div>
           ) : (
