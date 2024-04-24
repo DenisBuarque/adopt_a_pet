@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import useFlashMessage from "../hooks/useFlashMessage";
 
-const FormPet = ({ handleSubmit, petData }) => {
+const FormPet = ({handleSubmit, petData}) => {
 
-  const [pet, setPet] = useState({name: "pet", age: 2, weight: 1, color: "azul", description: "lalala"});
+  const [pet, setPet] = useState(petData || "");
 
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);

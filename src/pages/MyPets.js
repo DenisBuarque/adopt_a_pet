@@ -22,23 +22,25 @@ const MyPets = () => {
       });
   }, [token]);
 
-  async function handleDelete (id) {
-
+  async function handleDelete(id) {
     let msgType = "bg-green-600";
 
-    const data = await api.delete(`/pets/delete/${id}`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-      }
-    }).then((response) => {
-      const updateListPets = pets.filter((pet) => pet._id !== id);
-      setPets(updateListPets);
+    const data = await api
+      .delete(`/pets/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updateListPets = pets.filter((pet) => pet._id !== id);
+        setPets(updateListPets);
 
-      return response.data;
-    }).catch((error) => {
-      msgType = 'bg-red-600';
-      return error.response.data;
-    });
+        return response.data;
+      })
+      .catch((error) => {
+        msgType = "bg-red-600";
+        return error.response.data;
+      });
 
     setMessage(data.message, msgType);
   }
@@ -64,6 +66,8 @@ const MyPets = () => {
         </div>
       </div>
       <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        {pets.length === 0 && <p>Não há pets cadastros no momento.</p>}
+
         <table className="w-full table-auto text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 font-medium border-b">
             <tr>
@@ -73,18 +77,18 @@ const MyPets = () => {
               <th className="py-3 px-6">Cor</th>
               <th className="py-3 px-6">Status</th>
               <th className="py-3 px-6 text-center">Fotos</th>
-              <th className="py-3 px-6"></th>
+              <th className="py-3 px-6">Ações</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {pets.length === 0 && <p>Não há pets cadastros no momento.</p>}
             {pets.length > 0 &&
               pets.map((pet) => (
-                <tr key={pet.id}>
+                <tr key={pet._id}>
                   <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                     <img
                       src={`http://localhost:5000/assets/pets/${pet.images[0]}`}
-                      className="w-10 h-10 rounded-full" alt={pet.name}
+                      className="w-10 h-10 rounded-full"
+                      alt={pet.name}
                     />
                     <div>
                       <span className="block text-gray-700 text-sm font-medium">
@@ -95,19 +99,13 @@ const MyPets = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    {pet.age} ano(s)
-                  </td>
-                  <td className="px-6 py-4">
-                    {pet.weigth} Kg
-                  </td>
+                  <td className="px-6 py-4">{pet.age} ano(s)</td>
+                  <td className="px-6 py-4">{pet.weigth} Kg</td>
                   <td className="px-6 py-4">{pet.color}</td>
                   <td className="px-6 py-4">
-                    {pet.available ? (<p>Em adoção</p>) : (<p>Adotado</p>)}
+                    {pet.available ? <p>Em adoção</p> : <p>Adotado</p>}
                   </td>
-                  <td className="px-6 py-4 text-center">
-                    {pet.images.length}
-                  </td>
+                  <td className="px-6 py-4 text-center">{pet.images.length}</td>
                   <td className="float-right">
                     <div className="flex gap-1 mr-2">
                       <Link
