@@ -15,7 +15,7 @@ const Home = () => {
     // Clean nup functoin
     return () => {
       setPets([]);
-    }
+    };
   }, []);
 
   return (
@@ -144,7 +144,10 @@ const Home = () => {
                 {pet.description.substr(0, 200)}...
               </p>
 
-              <Link to={`/petshow/${pet._id}`} className="px-4 py-2 text-sm text-white duration-100 bg-blue-800 rounded w-full block text-center shadow-md">
+              <Link
+                to={`/petshow/${pet._id}`}
+                className="px-4 py-2 text-sm text-white duration-100 bg-blue-800 rounded w-full block text-center shadow-md"
+              >
                 VER MAIS DETALHES
               </Link>
             </div>

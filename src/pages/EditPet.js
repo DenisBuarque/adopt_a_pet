@@ -20,8 +20,6 @@ const EditPet = () => {
   const [color, setColor] = useState("");
   const [description, setDescription] = useState("");
 
-  const [pet, setPet] = useState({});
-
   // List data pet
   useEffect(() => {
     api
@@ -31,8 +29,6 @@ const EditPet = () => {
         },
       })
       .then((response) => {
-        setPet(response.data.pet);
-
         setImagesPet(response.data.pet.images);
         setName(response.data.pet.name);
         setAge(response.data.pet.age);
@@ -42,7 +38,6 @@ const EditPet = () => {
       });
 
       return () => {
-        setPet({});
         setImagesPet([]);
         setName("");
         setAge("");
@@ -51,8 +46,6 @@ const EditPet = () => {
         setDescription("");
       }
   }, [token, id]);
-
-  console.log(pet);
 
   // handle image preview
   const imageType = /image\/(png|jpg|jpeg)/gm;

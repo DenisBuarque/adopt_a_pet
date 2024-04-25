@@ -2,7 +2,7 @@ import api from "../utils/api";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import useFlashMessage from "../hooks/useFlashMessage";
-import { FaWhatsapp, FaHeart, FaComment } from "react-icons/fa";
+import {FaHeart} from "react-icons/fa";
 
 const PetShow = () => {
   const { id } = useParams();
@@ -10,21 +10,26 @@ const PetShow = () => {
   const [pet, setPet] = useState({});
   const { setMessage } = useFlashMessage();
 
-  const [token] = useState(localStorage.getItem("token") || "");
+  const [token] = useState(localStorage.getItem('token') || "");
 
   useEffect(() => {
     api.get(`/pets/detail/${id}`).then((response) => {
       setPet(response.data.pet);
     });
-  }, [id]);
 
+    return () => {
+        setPet({});
+    }
+  }, [id]);
 
   async function schedule() {
     let msgType = "bg-green-600";
 
     const data = await api
       .patch(`/pets/schedule/${pet._id}`, {
-        Authorization: `Bearer ${JSON.parse(token)}`,
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`
+        },
       })
       .then((response) => {
         return response.data;
@@ -39,7 +44,7 @@ const PetShow = () => {
 
   return (
     <section className="max-w-xl m-auto mb-20">
-      <h1 className="text-2xl font-semibold mb-4">
+      <h1 className="text-2xl font-semibold mb-1">
         Pet <span className="text-red-600">{pet.name}</span>
       </h1>
       <p className="mb-5">

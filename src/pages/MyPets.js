@@ -1,7 +1,7 @@
+import api from "../utils/api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import api from "../utils/api";
 import useFlashMessage from "../hooks/useFlashMessage";
 
 const MyPets = () => {
@@ -12,18 +12,18 @@ const MyPets = () => {
 
   useEffect(() => {
     api
-      .get("/pets/mypets", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
-        },
-      })
-      .then((response) => {
-        setPets(response.data.pets);
-      });
+    .get("/pets/mypets", {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(token)}`,
+      },
+    })
+    .then((response) => {
+      setPets(response.data.pets);
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
 
-      return () => {
-        setPets([]);
-      }
   }, [token]);
 
   async function handleDelete(id) {
@@ -70,8 +70,6 @@ const MyPets = () => {
         </div>
       </div>
       <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-        {pets.length === 0 && <p>Não há pets cadastros no momento.</p>}
-
         <table className="w-full table-auto text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 font-medium border-b">
             <tr>
