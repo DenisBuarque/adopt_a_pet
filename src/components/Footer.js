@@ -11,7 +11,7 @@ const Footer = () => {
     <footer className="text-gray-500 bg-white px-4 py-5 md:px-8">
       <div className="max-w-lg sm:mx-auto sm:text-center">
         <img
-          src="https://www.floatui.com/logo.svg"
+          src="https://www.floatui.com/logo.svg" alt="Logotipo"
           className="w-32 sm:mx-auto"
         />
         <p className="leading-relaxed mt-2 text-[15px]">
@@ -35,7 +35,10 @@ const Footer = () => {
         {authenticated ? (
           <>
             <li className=" hover:text-gray-800">
-              <Link to="/mypets">My Pets</Link>
+              <Link to="/myadoptions">Minhas Adoções</Link>
+            </li>
+            <li className=" hover:text-gray-800">
+              <Link to="/mypets">Meus Pets</Link>
             </li>
             <li className=" hover:text-gray-800">
               <Link to="/profile">Perfil</Link>

@@ -16,7 +16,7 @@ const MyPets = () => {
       await api
         .get("/pets/mypets", {
           headers: {
-            'Authorization': `Bearer ${JSON.parse(token)}`,
+            Authorization: `Bearer ${JSON.parse(token)}`,
           },
         })
         .then((response) => {
@@ -26,7 +26,7 @@ const MyPets = () => {
           return error.response.data;
         });
 
-        setLoading(false);
+      setLoading(false);
     })();
   }, [token]);
 
@@ -36,7 +36,7 @@ const MyPets = () => {
     const data = await api
       .delete(`/pets/delete/${id}`, {
         headers: {
-          'Authorization': `Bearer ${JSON.parse(token)}`,
+          Authorization: `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
@@ -53,8 +53,28 @@ const MyPets = () => {
     setMessage(data.message, msgType);
   }
 
-  if(loading) {
-    return <p>Carregando...</p>
+  async function handleConclude(id) {
+    let msgType = "bg-green-600";
+
+    const data = await api
+      .get(`/pets/conclude/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        msgType = "bg-red-600";
+        return error.response.data;
+      });
+
+    setMessage(data.message, msgType);
+  }
+
+  if (loading) {
+    return <p>Carregando...</p>;
   }
 
   return (
@@ -87,7 +107,7 @@ const MyPets = () => {
               <th className="py-3 px-6">Cor</th>
               <th className="py-3 px-6">Status</th>
               <th className="py-3 px-6 text-center">Fotos</th>
-              <th className="py-3 px-6">Ações</th>
+              <th className="py-3 px-6 text-center">Ações</th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
@@ -118,6 +138,12 @@ const MyPets = () => {
                   <td className="px-6 py-4 text-center">{pet.images.length}</td>
                   <td className="float-right">
                     <div className="flex gap-1 mr-2">
+                      {pet.adopter && (
+                        <button type="button"
+                          onClick={() => handleConclude(pet._id)}
+                          className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded duration-150 hover:bg-green-500"
+                        >Concluir Adoção</button>
+                      )}
                       <Link
                         to={`/editpet/${pet._id}`}
                         className="flex items-center gap-2 px-4 py-2 text-white bg-indigo-600 rounded duration-150 hover:bg-indigo-500"

@@ -9,6 +9,7 @@ import MyPets from "./pages/MyPets";
 import AddPet from "./pages/AddPet";
 import EditPet from "./pages/EditPet";
 import PetShow from "./pages/PetShow";
+import MyAdoptions from "./pages/MyAdoptions";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Auth/Profile";
@@ -35,6 +36,7 @@ function App() {
             <Route path="/addpet" element={<AddPet />} />
             <Route path="/editpet/:id" element={<EditPet />} />
             <Route path="/petshow/:id" element={<PetShow />} />
+            <Route path="/myadoptions" element={<MyAdoptions />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />

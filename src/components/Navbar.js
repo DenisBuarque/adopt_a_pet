@@ -98,10 +98,16 @@ const Navbar = () => {
             {authenticated ? (
               <>
                 <Link
+                  to="/myadoptions"
+                  className="block text-gray-700 hover:text-gray-900"
+                >
+                  Minha Adoções
+                </Link>
+                <Link
                   to="/mypets"
                   className="block text-gray-700 hover:text-gray-900"
                 >
-                  My Pets
+                  Meus Pets
                 </Link>
                 <Link
                   to="/profile"

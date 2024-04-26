@@ -32,11 +32,7 @@ const useAuth = () => {
     try {
       const data = await api.post("/users/store", user).then((response) => {
         return response.data;
-      }).catch((error) => {
-        msgText = error.response.data.message;
-        msgType = "bg-red-600";
       });
-
       await authUser(data);
     } catch (error) {
       msgText = error.response.data.message;
@@ -68,9 +64,6 @@ const useAuth = () => {
 
       const data = await api.post('/users/login', user).then((response) => {
         return response.data;
-      }).catch((error) => {
-        msgText = error.response.data.message;
-        msgType = "bg-red-500";
       });
 
       await authUser(data);
