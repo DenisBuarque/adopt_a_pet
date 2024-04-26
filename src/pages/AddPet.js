@@ -95,7 +95,7 @@ const AddPet = () => {
     const data = await api
       .post(`/pets/store`, formData, {
         headers: {
-          Authorization: `Beare ${JSON.parse(token)}`,
+          Authorization: `Bearer ${JSON.parse(token)}`,
           "Content-Type": "multipart/form-data",
         },
       })

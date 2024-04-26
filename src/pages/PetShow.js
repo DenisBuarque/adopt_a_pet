@@ -2,7 +2,7 @@ import api from "../utils/api";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import useFlashMessage from "../hooks/useFlashMessage";
-import {FaHeart} from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
 const PetShow = () => {
   const { id } = useParams();
@@ -10,16 +10,27 @@ const PetShow = () => {
   const [pet, setPet] = useState({});
   const { setMessage } = useFlashMessage();
 
-  const [token] = useState(localStorage.getItem('token') || "");
+  const [token] = useState(localStorage.getItem("token") || "");
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get(`/pets/detail/${id}`).then((response) => {
-      setPet(response.data.pet);
-    });
+    (async () => {
+      await api
+        .get(`/pets/detail/${id}`)
+        .then((response) => {
+          setPet(response.data.pet);
+        })
+        .catch((error) => {
+          console.log(error.data);
+        });
+
+        setLoading(false);
+    })();
 
     return () => {
-        setPet({});
-    }
+      setPet({});
+    };
   }, [id]);
 
   async function schedule() {
@@ -28,7 +39,7 @@ const PetShow = () => {
     const data = await api
       .patch(`/pets/schedule/${pet._id}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`
+          Authorization: `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
@@ -40,6 +51,10 @@ const PetShow = () => {
       });
 
     setMessage(data.message, msgType);
+  }
+
+  if(loading) {
+    return <p>Carregando...</p>;
   }
 
   return (
@@ -93,7 +108,11 @@ const PetShow = () => {
 
           {token ? (
             <div className="text-center mt-5">
-              <button onClick={schedule} type="button" className="px-5 py-3 text-white duration-150 bg-blue-800 rounded-full hover:bg-blue-800">
+              <button
+                onClick={schedule}
+                type="button"
+                className="px-5 py-3 text-white duration-150 bg-blue-800 rounded-full hover:bg-blue-800"
+              >
                 Agendar uma visita
               </button>
             </div>

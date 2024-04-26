@@ -7,23 +7,27 @@ import useFlashMessage from "../hooks/useFlashMessage";
 const MyPets = () => {
   const [pets, setPets] = useState([]);
   const [token] = useState(localStorage.getItem("token") || "");
+  const [loading, setLoading] = useState(true);
 
   const { setMessage } = useFlashMessage();
 
   useEffect(() => {
-    api
-    .get("/pets/mypets", {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-      },
-    })
-    .then((response) => {
-      setPets(response.data.pets);
-    })
-    .catch((error) => {
-      return error.response.data;
-    });
+    (async () => {
+      await api
+        .get("/pets/mypets", {
+          headers: {
+            'Authorization': `Bearer ${JSON.parse(token)}`,
+          },
+        })
+        .then((response) => {
+          setPets(response.data.pets);
+        })
+        .catch((error) => {
+          return error.response.data;
+        });
 
+        setLoading(false);
+    })();
   }, [token]);
 
   async function handleDelete(id) {
@@ -32,7 +36,7 @@ const MyPets = () => {
     const data = await api
       .delete(`/pets/delete/${id}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
+          'Authorization': `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
@@ -47,6 +51,10 @@ const MyPets = () => {
       });
 
     setMessage(data.message, msgType);
+  }
+
+  if(loading) {
+    return <p>Carregando...</p>
   }
 
   return (

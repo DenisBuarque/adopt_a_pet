@@ -7,16 +7,25 @@ import { FaWhatsapp } from "react-icons/fa";
 const Home = () => {
   const [search, setSearch] = useState("");
   const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/pets").then((response) => {
-      setPets(response.data.pets);
-    });
+    (async () => {
+      await api.get("/pets").then((response) => {
+        setPets(response.data.pets);
+      });
+      setLoading(false);
+    })();
+
     // Clean nup functoin
     return () => {
       setPets([]);
     };
   }, []);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
 
   return (
     <section className="md:mb-20">

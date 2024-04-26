@@ -14,7 +14,7 @@ const Message = () => {
 
       setTimeout(() => {
         setVisibility(false);
-      }, 3000);
+      }, 5000);
       
     });
 

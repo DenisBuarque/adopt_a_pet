@@ -10,12 +10,20 @@ const useAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
-      api.defaults.headers.Authorization = `Bearer ${token}`;
+      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       setAuthenticated(true);
     }
   }, []);
+
+  async function authUser(data) {
+    setAuthenticated(true);
+
+    localStorage.setItem("token", JSON.stringify(data.token));
+
+    navigate("/");
+  }
 
   async function register(user) {
     let msgText = "Cadastro realizado com sucesso!";
@@ -24,6 +32,9 @@ const useAuth = () => {
     try {
       const data = await api.post("/users/store", user).then((response) => {
         return response.data;
+      }).catch((error) => {
+        msgText = error.response.data.message;
+        msgType = "bg-red-600";
       });
 
       await authUser(data);
@@ -33,14 +44,6 @@ const useAuth = () => {
     }
 
     setMessage(msgText, msgType);
-  }
-
-  async function authUser(data) {
-    setAuthenticated(true);
-
-    localStorage.setItem("token", JSON.stringify(data.token));
-
-    navigate("/");
   }
 
   function logout () {
@@ -65,6 +68,9 @@ const useAuth = () => {
 
       const data = await api.post('/users/login', user).then((response) => {
         return response.data;
+      }).catch((error) => {
+        msgText = error.response.data.message;
+        msgType = "bg-red-500";
       });
 
       await authUser(data);
