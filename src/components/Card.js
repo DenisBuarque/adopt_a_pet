@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Like from "../components/Like";
-import { FaWhatsapp } from "react-icons/fa";
 import AvailablePet from "./AvailablePet";
 
 const Card = ({pet}) => {
@@ -11,7 +10,7 @@ const Card = ({pet}) => {
     >
       <div className="relative">
         <div className="absolute bottom-2 right-2">
-          <Like />
+          <Like pet={pet} />
         </div>
         <img
           src={`${process.env.REACT_APP_API}/assets/pets/${pet.images[0]}`}

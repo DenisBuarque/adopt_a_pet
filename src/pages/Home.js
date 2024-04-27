@@ -5,7 +5,6 @@ import Card from "../components/Card";
 import Search from "../components/Search";
 
 const Home = () => {
-  const [search, setSearch] = useState("");
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,7 +43,7 @@ const Home = () => {
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 md:mx-0">
         {pets.map((pet) => (
-          <Card pet={pet} />
+          <Card key={pet._id} pet={pet} />
         ))}
       </div>
     </section>
