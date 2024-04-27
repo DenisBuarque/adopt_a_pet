@@ -44,7 +44,7 @@ const Footer = () => {
               <Link to="/profile">Perfil</Link>
             </li>
             <li className=" hover:text-gray-800">
-              <Link to="/" onClick={logout}>Log out</Link>
+              <Link to="/" onClick={logout}>Sair</Link>
             </li>
           </>
         ) : (
@@ -53,7 +53,7 @@ const Footer = () => {
               <Link to="/register">Registrar-se</Link>
             </li>
             <li className=" hover:text-gray-800">
-              <Link to="/login">Log in</Link>
+              <Link to="/login">Fazer Login</Link>
             </li>
           </>
         )}

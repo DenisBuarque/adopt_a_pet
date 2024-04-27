@@ -7,9 +7,6 @@ const Like = () => {
       <Link>
         <FaHeart className="w-7 h-7 text-white mb-3" />
       </Link>
-      <Link>
-        <FaComment className="w-7 h-7 text-white" />
-      </Link>
     </>
   );
 };
