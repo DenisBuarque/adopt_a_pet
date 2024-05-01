@@ -1,40 +1,34 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import useFlashMessage from "../hooks/useFlashMessage";
 
 const Like = ({ pet }) => {
+  const [user, setUser] = useState({});
   const [color, setColor] = useState("text-white");
   const [token] = useState(localStorage.getItem("token") || "");
 
   const { setMessage } = useFlashMessage();
 
-  function handleLike(id) {
-
-    const data = api
-      .patch(`/pets/like/${id}`, {
+  // Loading data in form
+  useEffect(() => {
+    api
+      .get("/users/checkuser", {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        //msgType = "bg-red-600";
-        //return error.response.data;
+        setUser(response.data);
       });
+  }, [token]);
 
-    /*let msgType = "bg-green-600";
+  async function handleLike(id) {
 
-    const dataLike = {
-      usuario: pet.user._id,
-      animal: pet._id,
-    };
+    let msgType = "bg-green-600";
 
     const data = await api
-      .post(`/pets/like`, dataLike, {
+      .get(`/pets/like/${id}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
         },
@@ -48,8 +42,6 @@ const Like = ({ pet }) => {
       });
 
     setMessage(data.message, msgType);
-
-    setColor("text-red-500");*/
   }
 
   function loginError() {
@@ -61,13 +53,29 @@ const Like = ({ pet }) => {
   return (
     <>
       {!token ? (
-        <Link onClick={loginError}>
-          <FaHeart className={`w-7 h-7 mb-3 text-white`} />
-        </Link>
+        <div className="text-center">
+          <FaHeart
+            className="w-7 h-7 text-white cursor-pointer"
+            onClick={loginError}
+          />
+          <p className="">{pet.likes.length}</p>
+        </div>
       ) : (
-        <Link onClick={() => handleLike(pet.user._id)}>
-          <FaHeart className={`w-7 h-7 mb-3 text-white`} />
-        </Link>
+        <>
+          {pet.likes && (
+            <div className="text-center">
+              {pet.likes.includes(user._id) ? (
+                <FaHeart className={`w-7 h-7 text-red-500`} />
+              ) : (
+                <FaHeart
+                  onClick={() => handleLike(pet._id)}
+                  className="w-7 h-7 text-white cursor-pointer"
+                />
+              )}
+              <p className="text-white">{pet.likes.length}</p>
+            </div>
+          )}
+        </>
       )}
     </>
   );
