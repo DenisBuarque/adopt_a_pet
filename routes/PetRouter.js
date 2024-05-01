@@ -7,7 +7,7 @@ const verifyToken = require('../helpers/verifyToken');
 const { imageUpload } = require('../helpers/imageUpload');
 
 router.get('/', PetController.getAll);
-router.patch('/like/:id', verifyToken, PetController.likeUser);
+router.get('/like/:id', verifyToken, PetController.likeUser);
 router.post('/search/:query', PetController.searchPet);
 router.get('/mypets', verifyToken, PetController.getMyPets);
 router.get('/myadoptions', verifyToken, PetController.getMyAdoptions);

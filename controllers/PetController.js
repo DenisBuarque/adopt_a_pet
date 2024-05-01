@@ -14,10 +14,12 @@ module.exports = class PetController {
     res.status(200).json({ pets: pets });
   }
 
-  static async searchPet (req, res) {
+  static async searchPet(req, res) {
     const query = req.params.query;
-    const pets = await Pet.find({ name:{ $regex:'.*'+query+'.*', '$options': 'i'}}).sort("-createdAt");
-    res.status(200).json({ pets: pets});
+    const pets = await Pet.find({
+      name: { $regex: ".*" + query + ".*", $options: "i" },
+    }).sort("-createdAt");
+    res.status(200).json({ pets: pets });
   }
 
   static async getMyPets(req, res) {
@@ -56,60 +58,58 @@ module.exports = class PetController {
   static async petShow(req, res) {
     const id = req.params.id;
 
-    if(!ObjectId.isValid(id)) {
-      res.status(422).json({ message: 'Id inválido!'});
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id inválido!" });
       return;
     }
 
-    const pet = await Pet.findOne({ _id: id});
-    if(!pet) {
-      res.status(422).json({ message: "Pet não encontrado!"});
+    const pet = await Pet.findOne({ _id: id });
+    if (!pet) {
+      res.status(422).json({ message: "Pet não encontrado!" });
       return;
     }
 
     res.status(200).json({ pet: pet });
   }
 
-  static async likeUser (req, res) {
+  static async likeUser(req, res) {
     const { id } = req.params;
 
-    if(!ObjectId.isValid(id)) {
-      res.status(422).json({ message: "Id inválido"});
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id inválido" });
       return;
     }
 
     const token = getToken(req);
     const user = await getUserByToken(token);
 
-    const pet = await Pet.findOne({_id: id});
-    if(!pet) {
-      res.status(422).json({ message: "Pet não encontrado"});
+    const pet = await Pet.findOne({ _id: id });
+    if (!pet) {
+      res.status(422).json({ message: "Pet não encontrado" });
       return;
     }
 
-    const userId = new mongoose.Types.ObjectId(user._id);
+    if (pet.likes.includes(user._id)) {
+      res.status(422).json({ message: "Você já curtiu essa foto!" });
+      return;
+    }
 
     try {
+      pet.likes.push(user._id);
 
-      if (pet.likes.includes(userId)) {
-        res.status(422).json({ message: "Você já curtiu essa foto!" });
-        return;
-      }
-  
-      pet.likes.push(userId);
-  
       await pet.save();
-  
+
       res.status(200).json({
         petId: id,
-        userId: req.user._id,
+        userId: user._id,
         message: "Obrigado pelo like na foto.",
       });
+      
     } catch (error) {
       res.status(402).json({ message: "Ocorreu um erro tente mais tarde!" });
     }
-  };
-  
+  }
+
   static async store(req, res) {
     const { name, age, weigth, color, description } = req.body;
 
@@ -138,12 +138,16 @@ module.exports = class PetController {
     }
 
     if (!description) {
-      res.status(422).json({ message: "Por favor, digite a descrição do pet!" });
+      res
+        .status(422)
+        .json({ message: "Por favor, digite a descrição do pet!" });
       return;
     }
 
     if (images.length === 0) {
-      res.status(422).json({ message: "Por favor, adicione pelo menos uma imagem do pet!" });
+      res
+        .status(422)
+        .json({ message: "Por favor, adicione pelo menos uma imagem do pet!" });
       return;
     }
 
@@ -283,7 +287,9 @@ module.exports = class PetController {
     }
 
     if (!description) {
-      res.status(422).json({ message: "Por favor, digite a descrição do pet!" });
+      res
+        .status(422)
+        .json({ message: "Por favor, digite a descrição do pet!" });
       return;
     } else {
       data.description = description;
@@ -311,9 +317,7 @@ module.exports = class PetController {
 
     await Pet.findByIdAndUpdate(id, data);
 
-    res
-      .status(200)
-      .json({ message: "Registro atualizado com sucesso!" });
+    res.status(200).json({ message: "Registro atualizado com sucesso!" });
   }
 
   static async schedule(req, res) {
@@ -392,10 +396,8 @@ module.exports = class PetController {
 
     await Pet.findByIdAndUpdate(id, pet);
 
-    res
-      .status(200)
-      .json({
-        message: "Parabéns! O ciclo de adoção foi finalizado com sucesso!",
-      });
+    res.status(200).json({
+      message: "Parabéns! O ciclo de adoção foi finalizado com sucesso!",
+    });
   }
 };
