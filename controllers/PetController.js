@@ -1,5 +1,6 @@
 const Pet = require("../models/Pet");
-const Like = require('../models/Like');
+const mongoose = require("mongoose");
+
 // helpers
 const getToken = require("../helpers/getToken");
 const getUserByToken = require("../helpers/getUserByToken");
@@ -69,24 +70,46 @@ module.exports = class PetController {
     res.status(200).json({ pet: pet });
   }
 
-  static async likeStore(req, res) {
-    const { userId, petId } = req.body;
+  static async likeUser (req, res) {
+    const { id } = req.params;
 
-    const like = new Like({
-      userId,
-      petId
-    });
-
-    try {
-      await like.save();
-      res.status(201).json({ message: "Você curtiu o pet!"});
-
-    } catch (error) {
-      res.status(500).json({ message: error });
+    if(!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id inválido"});
+      return;
     }
 
-  }
+    const token = getToken(req);
+    const user = await getUserByToken(token);
 
+    const pet = await Pet.findOne({_id: id});
+    if(!pet) {
+      res.status(422).json({ message: "Pet não encontrado"});
+      return;
+    }
+
+    const userId = new mongoose.Types.ObjectId(user._id);
+
+    try {
+
+      if (pet.likes.includes(userId)) {
+        res.status(422).json({ message: "Você já curtiu essa foto!" });
+        return;
+      }
+  
+      pet.likes.push(userId);
+  
+      await pet.save();
+  
+      res.status(200).json({
+        petId: id,
+        userId: req.user._id,
+        message: "Obrigado pelo like na foto.",
+      });
+    } catch (error) {
+      res.status(402).json({ message: "Ocorreu um erro tente mais tarde!" });
+    }
+  };
+  
   static async store(req, res) {
     const { name, age, weigth, color, description } = req.body;
 
