@@ -10,17 +10,18 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      await api.get("/pets").then((response) => {
+      api.get("/pets").then((response) => {
         setPets(response.data.pets);
       });
       setLoading(false);
-    })();
+    }
+    )();
 
     // Clean nup functoin
     return () => {
       setPets([]);
     };
-  }, []);
+  },[]);
 
   async function handleSubmit(query) {
     setLoading(true);

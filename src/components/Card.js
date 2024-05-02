@@ -9,6 +9,14 @@ const Card = ({pet}) => {
       key={pet._id}
     >
       <div className="relative">
+        <div className="absolute top-2 left-2">
+          {pet.available ? (
+            <small className="bg-green-500 text-white px-3 py-1 text-sm rounded-full">Para adoção</small>
+          ) : (
+            <small className="bg-red-500 text-white px-3 py-1 text-sm rounded-full">Adoção concluída</small>
+          )}
+
+        </div>
         <div className="absolute bottom-2 right-2">
           <Like pet={pet} />
         </div>
@@ -42,9 +50,6 @@ const Card = ({pet}) => {
         <p className="text-gray-400 my-3">
           {pet.description.substr(0, 200)}...
         </p>
-
-        <AvailablePet pet={pet} />
-
         <Link
           to={`/petshow/${pet._id}`}
           className="px-4 py-4 text-sm text-white duration-100 bg-blue-800 rounded w-full block text-center shadow-md"
