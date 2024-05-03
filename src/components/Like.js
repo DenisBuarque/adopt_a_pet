@@ -7,7 +7,7 @@ import useFlashMessage from "../hooks/useFlashMessage";
 const Like = ({ pet }) => {
   const [user, setUser] = useState({});
   const [totalLikes, setTotalLikes] = useState(0);
-  const [color, setColor] = useState("text-white");
+  const [color, setColor] = useState("text-black");
   const [token] = useState(localStorage.getItem("token") || "");
 
   const { setMessage } = useFlashMessage();
@@ -67,10 +67,10 @@ const Like = ({ pet }) => {
       {!token ? (
         <div className="flex items-center">
           <HiMiniHandThumbUp
-            className="w-7 h-7 text-white cursor-pointer"
+            className="w-7 h-7 text-black cursor-pointer"
             onClick={loginError}
           />
-          <p className="text-white ml-3">{totalLikes} like(s)</p>
+          <p className="text-black ml-3">{totalLikes} like(s)</p>
         </div>
       ) : (
         <>
@@ -84,7 +84,7 @@ const Like = ({ pet }) => {
                   className={`w-7 h-7 cursor-pointer ${color}`}
                 />
               )}
-              <p className="text-white ml-3">{totalLikes} like(s)</p>
+              <p className="text-black ml-3">{totalLikes} like(s)</p>
             </div>
           )}
         </>
