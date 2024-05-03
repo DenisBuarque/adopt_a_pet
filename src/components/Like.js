@@ -65,17 +65,17 @@ const Like = ({ pet }) => {
   return (
     <>
       {!token ? (
-        <div className="text-center">
+        <div className="flex items-center">
           <HiMiniHandThumbUp
             className="w-7 h-7 text-white cursor-pointer"
             onClick={loginError}
           />
-          <p className="text-white">{totalLikes}</p>
+          <p className="text-white ml-3">{totalLikes} like(s)</p>
         </div>
       ) : (
         <>
           {pet.likes && user && (
-            <div className="text-center">
+            <div className="flex items-center">
               {pet.likes.includes(user._id) ? (
                 <HiMiniHandThumbUp className={`w-7 h-7 text-red-500`} />
               ) : (
@@ -84,7 +84,7 @@ const Like = ({ pet }) => {
                   className={`w-7 h-7 cursor-pointer ${color}`}
                 />
               )}
-              <p className="text-white">{totalLikes}</p>
+              <p className="text-white ml-3">{totalLikes} like(s)</p>
             </div>
           )}
         </>
