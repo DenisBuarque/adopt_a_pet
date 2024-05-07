@@ -95,7 +95,7 @@ module.exports = class UserController {
       return;
     }
     // authentication user
-    await createUserToken(user, req, res);
+    await createUserToken(req, res, user);
   }
 
   static async checkUser(req, res) {
