@@ -54,10 +54,11 @@ const MyPets = () => {
   }
 
   async function handleConclude(id) {
+
     let msgType = "bg-green-600";
 
     const data = await api
-      .get(`/pets/conclude/${id}`, {
+      .patch(`/pets/conclude/adoption/${id}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
         },
@@ -142,7 +143,7 @@ const MyPets = () => {
                         <button type="button"
                           onClick={() => handleConclude(pet._id)}
                           className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded duration-150 hover:bg-green-500"
-                        >Concluir Adoção</button>
+                        >Concluir</button>
                       )}
                       <Link
                         to={`/editpet/${pet._id}`}

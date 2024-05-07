@@ -1,6 +1,6 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useFlashMessage from "../hooks/useFlashMessage";
 import AvailableVisit from "../components/AvailableVisit";
 import Like from "../components/Like";
@@ -40,7 +40,7 @@ const PetShow = () => {
     const data = await api
       .patch(`/pets/schedule/${pet._id}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
+          'Authorization': `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
@@ -73,7 +73,8 @@ const PetShow = () => {
             <div key={index}>
               <img
                 src={process.env.REACT_APP_API + `/assets/pets/` + image}
-                alt={pet.name}
+                alt={pet.name} 
+                loading="eager"
               />
             </div>
           ))}
