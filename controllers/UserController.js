@@ -64,7 +64,7 @@ module.exports = class UserController {
       // save user data
       const user = await data.save();
       // authentication jwt token
-      await createUserToken(user, req, res);
+      await createUserToken(req, res, user);
     } catch (error) {
       console.log(error);
     }

@@ -3,7 +3,9 @@ const getToken = require('./getToken');
 
 const verifyToken = (req, res, next) => {
 
-    if(!req.headers.authorization) {
+    //console.log(req.headers);
+
+    if(!req.headers['authorization']) {
         res.status(401).json({ message: "Você não tem autorização!"});
         return;
     }
