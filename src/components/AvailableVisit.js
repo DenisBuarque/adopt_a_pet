@@ -34,7 +34,7 @@ const AvailableVisit = ({ token, schedule }) => {
               <div className="self-center ml-3">
                 <span className="text-red-600 font-semibold">Atenção!</span>
                 <p className="text-red-600 mt-1">
-                  Faça o login para agendar uma visita para esse pet,
+                  Faça o login para agendar uma visita para esse pet.
                 </p>
               </div>
             </div>
