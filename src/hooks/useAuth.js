@@ -17,12 +17,6 @@ const useAuth = () => {
     }
   }, []);
 
-  async function authUser(data) {
-    setAuthenticated(true);
-    localStorage.setItem("token", JSON.stringify(data.token));
-    navigate("/");
-  }
-
   async function register(user) {
     let msgText = "Cadastro realizado com sucesso!";
     let msgType = "bg-green-600";
@@ -73,6 +67,13 @@ const useAuth = () => {
 
     setMessage(msgText, msgType);
   }
+
+  async function authUser(data) {
+    setAuthenticated(true);
+    localStorage.setItem("token", JSON.stringify(data.token));
+    navigate("/");
+  }
+
 
   return { register, authenticated, logout, login };
 };

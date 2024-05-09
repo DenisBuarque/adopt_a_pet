@@ -40,7 +40,7 @@ const Home = () => {
 
       <Search handleSubmit={handleSubmit} />
       
-      {!pets && <p>Não há pets cadastrados ou disponível para adoção.</p>}
+      {pets && <p className="text-center font-semibold">Não há pets disponível para adoção.</p>}
 
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 md:mx-0">
         {pets.map((pet) => (

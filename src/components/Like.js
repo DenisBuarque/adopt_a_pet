@@ -1,6 +1,5 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
-import { FaHeart } from "react-icons/fa";
 import { HiMiniHandThumbUp } from "react-icons/hi2";
 import useFlashMessage from "../hooks/useFlashMessage";
 
@@ -31,8 +30,9 @@ const Like = ({ pet }) => {
 
     return () => {
       setUser({});
+      setTotalLikes(0)
     };
-  }, [token]);
+  }, [token, pet.likes.length]);
 
   async function handleLike(id) {
     let msgType = "bg-green-600";

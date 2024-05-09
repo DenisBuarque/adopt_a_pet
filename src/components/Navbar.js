@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 // Context
-import { useContext } from "react";
 import { Context } from "../context/UserContext";
 
 const Navbar = () => {
