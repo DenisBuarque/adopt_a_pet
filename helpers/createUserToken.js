@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-const createUserToken = async (req, res, user) => {
+const createUserToken = async (user, req, res) => {
     const token = jwt.sign({
         name: user.name,
         id: user._id
-    }, 'mysecret');
+    }, "mysecret");
 
-    console.log(req)
-
+    console.log(req);
+    
     res.status(200).json({ 
         message: 'Você está autenticado!', 
         token: token,

@@ -6,11 +6,11 @@ const getToken = require("../helpers/getToken");
 const getUserByToken = require("../helpers/getUserByToken");
 const ObjectId = require("mongoose").Types.ObjectId;
 const fs = require("fs");
-const { unlink } = require("fs/promises");
 
 module.exports = class PetController {
   static async getAll(req, res) {
     const pets = await Pet.find().sort("-createdAt");
+    console.log(req);
     res.status(200).json({ pets: pets });
   }
 
@@ -212,7 +212,7 @@ module.exports = class PetController {
     if (pet.images.length > 0) {
       pet.images.map((img) => {
         let filename = fs.readdirSync("public/assets/pets").includes(img);
-        console.log(filename);
+
         if (filename) {
           fs.unlink(`public/assets/pets/${img}`, function (err) {
             if (err) {

@@ -64,9 +64,10 @@ module.exports = class UserController {
       // save user data
       const user = await data.save();
       // authentication jwt token
-      await createUserToken(req, res, user);
+      await createUserToken(user, req, res);
+
     } catch (error) {
-      console.log(error);
+      res.status(500).json({ message: error });
     }
   }
 
@@ -95,11 +96,13 @@ module.exports = class UserController {
       return;
     }
     // authentication user
-    await createUserToken(req, res, user);
+    await createUserToken(user, req, res);
   }
 
   static async checkUser(req, res) {
     let currentUser;
+
+    console.log(req);
 
     if (req.headers.authorization) {
       const token = getToken(req);
