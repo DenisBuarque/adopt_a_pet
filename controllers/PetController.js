@@ -10,7 +10,6 @@ const fs = require("fs");
 module.exports = class PetController {
   static async getAll(req, res) {
     const pets = await Pet.find().sort("-createdAt");
-    console.log(req);
     res.status(200).json({ pets: pets });
   }
 
@@ -23,6 +22,7 @@ module.exports = class PetController {
   }
 
   static async getMyPets(req, res) {
+
     const token = getToken(req);
     const user = await getUserByToken(token);
 
@@ -31,6 +31,7 @@ module.exports = class PetController {
   }
 
   static async getMyAdoptions(req, res) {
+
     const token = getToken(req);
     const user = await getUserByToken(token);
 
@@ -56,6 +57,7 @@ module.exports = class PetController {
   }
 
   static async petShow(req, res) {
+
     const id = req.params.id;
 
     if (!ObjectId.isValid(id)) {
