@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import api from "../../utils/api";
 import useFlashMessage from "../../hooks/useFlashMessage";
 import ImageNotFound from "../../assets/images/photo-not-found.png";
-import PreviewImage from "../../assets/images/photo-not-found.png";
 
 // Context
 import { Context } from "../../context/UserContext";

@@ -10,7 +10,7 @@ const useAuth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       setAuthenticated(true);
@@ -34,32 +34,29 @@ const useAuth = () => {
     setMessage(msgText, msgType);
   }
 
-  function logout () {
+  function logout() {
     const msgText = "Logout realizado com sucesso!";
     const msgType = "bg-green-600";
 
     setAuthenticated(false);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
 
-    navigate('/');
+    navigate("/");
 
     setMessage(msgText, msgType);
   }
 
-  async function login (user) {
-
+  async function login(user) {
     let msgText = "Login realizado com sucesso";
     let msgType = "bg-green-600";
 
     try {
-
-      const data = await api.post('/users/login', user).then((response) => {
+      const data = await api.post("/users/login", user).then((response) => {
         return response.data;
       });
 
       await authUser(data);
-      
     } catch (error) {
       msgText = error.response.data.message;
       msgType = "bg-red-500";
@@ -73,7 +70,6 @@ const useAuth = () => {
     localStorage.setItem("token", JSON.stringify(data.token));
     navigate("/");
   }
-
 
   return { register, authenticated, logout, login };
 };

@@ -7,6 +7,7 @@ import Search from "../components/Search";
 const Home = () => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [token] = useState(localStorage.getItem("token") || "");
 
   useEffect(() => {
     (async () => {
