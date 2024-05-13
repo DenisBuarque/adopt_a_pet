@@ -40,8 +40,8 @@ const PetShow = () => {
     const data = await api
       .patch(`/pets/schedule/${pet._id}`, {
         headers: {
-          'Authorization': `Bearer ${JSON.parse(token)}`,
-        },
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        }
       })
       .then((response) => {
         return response.data;
