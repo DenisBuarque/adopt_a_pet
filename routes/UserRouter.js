@@ -8,8 +8,8 @@ const { imageUpload } = require('../helpers/imageUpload');
 
 router.post('/store', UserController.store);
 router.post('/login', UserController.login);
-router.get('/checkuser', UserController.checkUser);
-router.get('/edit/:id', UserController.getUserById);
+router.get('/checkuser', verifyToken, UserController.checkUser);
+router.get('/edit/:id', verifyToken, UserController.getUserById);
 router.patch('/update/:id', verifyToken, imageUpload.single("image"), UserController.update);
 
 module.exports = router;
