@@ -22,8 +22,8 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.static('public'));
 
 // routes
-app.use('/users', UserRouter);
 app.use('/pets', PetRouter);
+app.use('/users', UserRouter);
 
 app.listen(5000, () => {
     console.log("Servidor rodando na porta 5000");

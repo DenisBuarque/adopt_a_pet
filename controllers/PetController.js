@@ -387,12 +387,12 @@ module.exports = class PetController {
     const token = getToken(req);
     const user = await getUserByToken(token);
 
-    if (pet.user._id.toString() === user._id.toString()) {
+    /*if (pet.user._id.toString() === user._id.toString()) {
       res
         .status(422)
         .json({ message: "Houve um problema em processar sua solicitação!" });
       return;
-    }
+    }*/
 
     pet.available = false;
 
