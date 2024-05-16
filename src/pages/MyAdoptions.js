@@ -1,7 +1,5 @@
 import api from "../utils/api";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const MyAdoptions = () => {
   const [pets, setPets] = useState([]);
@@ -37,7 +35,7 @@ const MyAdoptions = () => {
           <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
             Minhas Adoções
           </h3>
-          <p className="text-gray-600 mt-2">Lista de pets adotados.</p>
+          <p className="text-gray-600 mt-2">Lista de pets em que eu tenho interesse de visitar e adotar.</p>
         </div>
       </div>
       <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">

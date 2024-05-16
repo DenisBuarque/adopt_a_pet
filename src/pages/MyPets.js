@@ -140,10 +140,14 @@ const MyPets = () => {
                   <td className="float-right">
                     <div className="flex gap-1 mr-2">
                       {pet.adopter && (
-                        <button type="button"
+                        <>
+                        {pet.available && (
+                          <button type="button"
                           onClick={() => handleConclude(pet._id)}
                           className="flex items-center gap-2 px-4 py-2 text-white bg-green-600 rounded duration-150 hover:bg-green-500"
                         >Concluir</button>
+                        )}
+                        </>
                       )}
                       <Link
                         to={`/editpet/${pet._id}`}

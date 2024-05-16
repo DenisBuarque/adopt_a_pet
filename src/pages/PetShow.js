@@ -16,6 +16,12 @@ const PetShow = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+    }
+  }, [token]);
+
+  useEffect(() => {
     (async () => {
       await api
         .get(`/pets/detail/${id}`)

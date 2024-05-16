@@ -26,13 +26,10 @@ const Like = ({ pet }) => {
       })();
     }
 
-    setTotalLikes(pet.likes.length);
-
     return () => {
       setUser({});
-      setTotalLikes(0)
     };
-  }, [token, pet.likes.length]);
+  }, [token]);
 
   async function handleLike(id) {
     let msgType = "bg-green-600";
@@ -53,7 +50,6 @@ const Like = ({ pet }) => {
 
     setMessage(data.message, msgType);
     setColor("text-red-500");
-    setTotalLikes(totalLikes + 1);
   }
 
   function loginError() {
@@ -70,7 +66,7 @@ const Like = ({ pet }) => {
             className="w-7 h-7 text-black cursor-pointer"
             onClick={loginError}
           />
-          <p className="text-black ml-3">{totalLikes} like(s)</p>
+          <p className="text-black ml-3">{pet.likes.length} like(s)</p>
         </div>
       ) : (
         <>
@@ -84,7 +80,7 @@ const Like = ({ pet }) => {
                   className={`w-7 h-7 cursor-pointer ${color}`}
                 />
               )}
-              <p className="text-black ml-3">{totalLikes} like(s)</p>
+              <p className="text-black ml-3">{pet.likes.length} like(s)</p>
             </div>
           )}
         </>
