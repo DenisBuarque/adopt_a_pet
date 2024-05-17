@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
+import { FaCalendar } from 'react-icons/fa';
 
 const AvailableVisit = ({ token, schedule }) => {
   return (
     <>
       {token ? (
-        <div className="text-center">
+        <div className="flex justify-center">
           <button
             onClick={schedule}
             type="button"
-            className="px-5 py-3 text-white duration-150 bg-blue-800 rounded-full hover:bg-blue-800"
+            className="flex items-center px-10 py-3 text-white duration-150 bg-blue-800 rounded-full hover:bg-blue-800"
           >
-            Agendar uma visita
+            <FaCalendar className='mr-2' /> Agendar uma visita
           </button>
         </div>
       ) : (
