@@ -5,9 +5,11 @@ import useFlashMessage from "../hooks/useFlashMessage";
 
 const Like = ({ pet }) => {
   const [user, setUser] = useState({});
-  const [totalLikes, setTotalLikes] = useState(0);
-  const [color, setColor] = useState("text-black");
   const [token] = useState(localStorage.getItem("token") || "");
+
+  const [liked, setLiked] = useState(false);
+
+  const [countLike, setCountLike] = useState(pet.likes.length);
 
   const { setMessage } = useFlashMessage();
 
@@ -31,8 +33,9 @@ const Like = ({ pet }) => {
     };
   }, [token]);
 
-  async function handleLike(id) {
-    let msgType = "bg-green-600";
+  const toogleLike = async (id) => {
+    setLiked(!liked);
+    setCountLike(countLike + 1);
 
     const data = await api
       .get(`/pets/like/${id}`, {
@@ -44,48 +47,72 @@ const Like = ({ pet }) => {
         return response.data;
       })
       .catch((error) => {
-        msgType = "bg-red-600";
-        return error.response.data;
+        console.log(error.response.data);
       });
+  };
 
-    setMessage(data.message, msgType);
-    setColor("text-red-500");
-  }
-
-  function loginError() {
+  const loginLiked = () => {
     let msgType = "bg-red-600";
     let msgText = "Você deve fazer o login para curtir o Pet.";
     setMessage(msgText, msgType);
-  }
+    setLiked(false);
+  };
 
   return (
-    <>
-      {!token ? (
-        <div className="flex items-center">
+    <div className="w-full flex justify-between p-2">
+      <div className="flex items-center">
+        {!token && (
           <HiMiniHandThumbUp
             className="w-7 h-7 text-black cursor-pointer"
-            onClick={loginError}
+            onClick={loginLiked}
           />
-          <p className="text-black ml-3">{pet.likes.length} like(s)</p>
-        </div>
-      ) : (
-        <>
-          {pet.likes && user && (
-            <div className="flex items-center">
-              {pet.likes.includes(user._id) ? (
-                <HiMiniHandThumbUp className={`w-7 h-7 text-red-500`} />
-              ) : (
-                <HiMiniHandThumbUp
-                  onClick={() => handleLike(pet._id)}
-                  className={`w-7 h-7 cursor-pointer ${color}`}
-                />
-              )}
-              <p className="text-black ml-3">{pet.likes.length} like(s)</p>
-            </div>
-          )}
-        </>
-      )}
-    </>
+        )}
+
+        {token && (
+          <>
+            {pet.likes && user && (
+              <>
+                {pet.likes.includes(user._id) ? (
+                  <HiMiniHandThumbUp
+                    className="w-7 h-7 text-red-500"
+                    title="Curtido"
+                  />
+                ) : (
+                  <>
+                    {liked ? (
+                      <HiMiniHandThumbUp
+                        className="w-7 h-7 text-red-500"
+                        title="Curtido"
+                      />
+                    ) : (
+                      <HiMiniHandThumbUp
+                        className="w-7 h-7 text-black cursor-pointer"
+                        onClick={() => toogleLike(pet._id)}
+                        title="Curtir"
+                      />
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </>
+        )}
+
+        <p className="text-black ml-3">{countLike}</p>
+      </div>
+
+      <div>
+        {pet.available ? (
+          <small className="bg-green-500 text-white px-3 py-1 text-sm rounded-full">
+            Para adoção
+          </small>
+        ) : (
+          <small className="bg-red-500 text-white px-3 py-1 text-sm rounded-full">
+            Adoção concluída
+          </small>
+        )}
+      </div>
+    </div>
   );
 };
 

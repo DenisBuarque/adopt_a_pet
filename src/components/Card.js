@@ -7,26 +7,14 @@ const Card = ({ pet }) => {
       className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
       key={pet._id}
     >
-      <div style={{backgroundImage: `url(${process.env.REACT_APP_API}/assets/pets/${pet.images[0]})`}} className="w-full h-64 object-cover bg-no-repeat">
- 
-      </div>
+      <div
+        style={{
+          backgroundImage: `url(${process.env.REACT_APP_API}/assets/pets/${pet.images[0]})`,
+        }}
+        className="w-full h-64 object-cover bg-no-repeat"
+      ></div>
 
-      <div className="w-full flex justify-between p-2">
-        <div>
-          <Like pet={pet} />
-        </div>
-        <div>
-          {pet.available ? (
-            <small className="bg-green-500 text-white px-3 py-1 text-sm rounded-full">
-              Para adoção
-            </small>
-          ) : (
-            <small className="bg-red-500 text-white px-3 py-1 text-sm rounded-full">
-              Adoção concluída
-            </small>
-          )}
-        </div>
-      </div>
+      <Like pet={pet} />
 
       <div className="pt-3 mx-4 mb-3">
         <h3 className="text-xl text-gray-900">{pet.name}</h3>
