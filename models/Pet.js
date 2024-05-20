@@ -28,12 +28,8 @@ const Pet = mongoose.model(
             type: Array,
             required: true
         },
-        available: {
-            type: Boolean
-        },
-        likes: {
-            type: Array,
-        },
+        available: Boolean,
+        likes: Array,
         user: Object,
         adopter: Object,
     }, {timestamps: true})

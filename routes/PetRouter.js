@@ -10,6 +10,8 @@ router.get('/', PetController.getAll);
 router.post('/search/:query', PetController.searchPet);
 router.get('/like/:id', verifyToken, PetController.likeUser);
 router.get('/mypets', verifyToken, PetController.getMyPets);
+router.post('/schedulevisit/:id', verifyToken, PetController.scheduleVisit);
+router.get('/myvisits', verifyToken, PetController.getMyVisits);
 router.get('/myadoptions', verifyToken, PetController.getMyAdoptions);
 router.get('/show/:id', verifyToken, PetController.getPetById);
 router.get('/detail/:id', PetController.petShow);

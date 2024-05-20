@@ -1,4 +1,5 @@
 const Pet = require("../models/Pet");
+const Schedule = require("../models/Schedule");
 const mongoose = require("mongoose");
 
 // helpers
@@ -36,6 +37,14 @@ module.exports = class PetController {
     const user = await getUserByToken(token);
 
     const pets = await Pet.find({ "adopter._id": user._id }).sort("-createdAt");
+    res.status(200).json({ pets });
+  }
+
+  static async getMyVisits(req, res) {
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    const pets = await Schedule.find({ "pet.user._id": user._id });
     res.status(200).json({ pets });
   }
 
@@ -320,6 +329,53 @@ module.exports = class PetController {
     await Pet.findByIdAndUpdate(id, data);
 
     res.status(200).json({ message: "Registro atualizado com sucesso!" });
+  }
+
+  static async scheduleVisit(req, res) {
+    const id = req.params.id;
+
+    if(!ObjectId.isValid(id)) {
+      res.status(422).json({ message: "Id inválido!"});
+      return;
+    }
+
+    const pet = await Pet.findOne({_id: id});
+    if(!pet) {
+      res.status(422).jsn({ message: "Pet não encontrado!"});
+      return;
+    }
+
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    //const visit = await Schedule.find();
+
+    /*if(pet._id.equals(id) && visit.visitor._id) {
+      res.status(422).json({ message: "Você já agendou uma visita para esse pet!"});
+      return;
+    }*/
+
+    const schedule = Schedule({
+      pet: {
+        _id: pet._id,
+        name: pet.name,
+      },
+      visitor: {
+        _id: user.id,
+        name: user.name,
+        phone: user.phone,
+        email: user. email,
+        image: user.image,
+      },
+      concluded: false,
+    });
+
+    try {
+      await schedule.save();
+      res.status(200).json({ message: "Sua visita foi agendada com sucesso!"}); 
+    } catch (error) {
+      res.status(422).json({ message: "Ocorreu um erro no agendamento!"});
+    }
   }
 
   static async schedule(req, res) {
