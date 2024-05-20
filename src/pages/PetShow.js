@@ -90,35 +90,15 @@ const PetShow = () => {
         <Like pet={pet} />
       </div>
 
-      <div className="border p-4 rounded-md">
-        <div className="flex items-center">
-          {pet.user.image && pet.user.image !== undefined && (
-            <div className="flex-none w-10 h-10 rounded-full mr-2">
-              <img
-                src={`${process.env.REACT_APP_API}/assets/users/${pet.user.image}`}
-                className="w-full h-full rounded-full"
-                alt={pet.user.name}
-              />
-            </div>
-          )}
-          <div>
-            <span className="block text-gray-900">{pet.user.name}</span>
-            <span className="flex items-center text-gray-400 text-sm">
-              Falar com:
-            </span>
-          </div>
-        </div>
+      <h2 className="text-xl font-semibold mt-3">Caracteristicas do Pet</h2>
+      <p>Nome: {pet.name}</p>
+      <p>Idade: {pet.age} ano(s)</p>
+      <p>Peso: {pet.weigth} Kg</p>
+      <p>Cor: {pet.color}</p>
+      <h2 className="text-xl font-semibold mt-3">Descrição do Pet</h2>
+      <p className="mb-10">{pet.description}</p>
 
-        <h2 className="text-xl font-semibold mt-3">Caracteristicas do Pet</h2>
-        <p>Nome: {pet.name}</p>
-        <p>Idade: {pet.age} ano(s)</p>
-        <p>Peso: {pet.weigth} Kg</p>
-        <p>Cor: {pet.color}</p>
-        <h2 className="text-xl font-semibold mt-3">Descrição do Pet</h2>
-        <p className="mb-10">{pet.description}</p>
-
-        <AvailableVisit token={token} schedule={schedule} />
-      </div>
+      <AvailableVisit token={token} schedule={schedule} />
     </section>
   );
 };

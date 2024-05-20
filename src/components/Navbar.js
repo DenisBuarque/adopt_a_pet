@@ -1,3 +1,4 @@
+import api from "../utils/api";
 import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 // Context
@@ -5,8 +6,26 @@ import { Context } from "../context/UserContext";
 
 const Navbar = () => {
   const [state, setState] = useState(false);
+  const [user, setUser] = useState({});
+  const [token] = useState(localStorage.getItem("token") || "");
   //context
   const { authenticated, logout } = useContext(Context);
+
+  useEffect(() => {
+    if (token) {
+      (async () => {
+        await api
+          .get("/users/checkuser", {
+            headres: {
+              Authorization: `Bearer ${JSON.parse(token)}`,
+            },
+          })
+          .then((response) => {
+            setUser(response.data);
+          });
+      })();
+    }
+  }, [token]);
 
   useEffect(() => {
     document.onClick = (e) => {
@@ -115,7 +134,8 @@ const Navbar = () => {
                   Perfil
                 </Link>
                 <Link
-                  to="/" onClick={logout}
+                  to="/"
+                  onClick={logout}
                   className="flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-red-800 hover:bg-red-700 active:bg-red-900 rounded-full md:inline-flex"
                 >
                   Sair
@@ -146,9 +166,16 @@ const Navbar = () => {
                   className="flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-blue-800 hover:bg-blue-700 active:bg-blue-900 rounded-full md:inline-flex"
                 >
                   Fazer Login
-                  
                 </Link>
               </>
+            )}
+
+            {user.image && (
+              <img
+                src={`${process.env.REACT_APP_API}/assets/users/${user.image}`}
+                alt={user.name}
+                className="w-10 h-10 rounded-full"
+              />
             )}
           </div>
         </div>
