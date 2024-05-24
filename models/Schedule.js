@@ -5,9 +5,13 @@ const Schedule = mongoose.model(
   "Schedule",
   new Schema(
     {
+      responsible: {
+        type: String,
+        require: true,
+      },
       pet: Object,
       visitor: Object,
-      concluded: Boolean,
+      confirmed: Boolean,
     },
     { timestamps: true }
   )

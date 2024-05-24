@@ -20,5 +20,6 @@ router.patch('/update/:id', verifyToken, imageUpload.array('images'), PetControl
 router.patch('/schedule/:id', verifyToken, PetController.schedule);
 router.patch('/conclude/adoption/:id', verifyToken, PetController.concludeAdoption);
 router.delete('/delete/:id', verifyToken, PetController.delete);
+router.delete('/deleteschedule/:id', verifyToken, PetController.deleteVisit);
 
 module.exports = router;
