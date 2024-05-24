@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Lei from "./pages/Lei";
 import MyPets from "./pages/MyPets";
+import MyVisits from "./pages/MyVisits";
 import AddPet from "./pages/AddPet";
 import EditPet from "./pages/EditPet";
 import PetShow from "./pages/PetShow";
@@ -33,6 +34,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/lei" element={<Lei />} />
             <Route path="/mypets" element={<MyPets />} />
+            <Route path="/myvisits" element={<MyVisits />} />
             <Route path="/addpet" element={<AddPet />} />
             <Route path="/editpet/:id" element={<EditPet />} />
             <Route path="/petshow/:id" element={<PetShow />} />

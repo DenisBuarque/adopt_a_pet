@@ -12,18 +12,19 @@ const Navbar = () => {
   const { authenticated, logout } = useContext(Context);
 
   useEffect(() => {
-    if (token) {
-      (async () => {
-        await api
-          .get("/users/checkuser", {
-            headres: {
-              Authorization: `Bearer ${JSON.parse(token)}`,
-            },
-          })
-          .then((response) => {
-            setUser(response.data);
-          });
-      })();
+    async function test () {
+      await api
+      .get("users/checkuser", {
+        headres: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+      }).catch((err) => console.log(err));
+    }
+    if(token){
+      test();
     }
   }, [token]);
 
@@ -115,6 +116,12 @@ const Navbar = () => {
           <div className="flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0">
             {authenticated ? (
               <>
+                <Link
+                  to="/myvisits"
+                  className="block text-gray-700 hover:text-gray-900"
+                >
+                  Minhas Visitas
+                </Link>
                 <Link
                   to="/myadoptions"
                   className="block text-gray-700 hover:text-gray-900"

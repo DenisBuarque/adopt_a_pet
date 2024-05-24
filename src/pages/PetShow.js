@@ -40,11 +40,31 @@ const PetShow = () => {
     };
   }, [id]);
 
-  async function schedule() {
+  /*async function schedule_old() {
     let msgType = "bg-green-600";
 
     const data = await api
       .patch(`/pets/schedule/${pet._id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        msgType = "bg-red-600";
+        return error.response.data;
+      });
+
+    setMessage(data.message, msgType);
+  }*/
+
+  async function schedule() {
+    let msgType = "bg-green-500";
+
+    const data = await api
+      .post(`/pets/schedulevisit/${pet._id}`, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
         },
@@ -80,7 +100,6 @@ const PetShow = () => {
               <img
                 src={process.env.REACT_APP_API + `/assets/pets/` + image}
                 alt={pet.name}
-                loading="eager"
               />
             </div>
           ))}
